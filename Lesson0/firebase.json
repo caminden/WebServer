@@ -5,6 +5,7 @@
     ]
   },
   "hosting": {
+    "site": "lesson0-cdefghijklm",
     "public": "public",
     "ignore": [
       "firebase.json",
