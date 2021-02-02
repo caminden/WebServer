@@ -39,16 +39,24 @@
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
           <li class="nav-item modal-menus-pre-auth">
-            <button class="btn-outline-warning" data-toggle="modal" data-target="#modal-signin-form">Sign in</button>
+            <button
+              class="btn-outline-warning"
+              data-toggle="modal"
+              data-target="#modal-signin-form"
+            >
+              Sign in
+            </button>
           </li>
           <li class="nav-item modal-menus-post-auth">
-            <button class="btn-outline-primary">Home</button>
+            <button id="menu-home" class="btn-outline-primary">Home</button>
           </li>
           <li class="nav-item modal-menus-post-auth">
-            <button class="btn-outline-primary">About</button>
+            <button id="menu-about" class="btn-outline-primary">About</button>
           </li>
           <li class="nav-item modal-menus-post-auth">
-            <button id="menu-signout" class="btn-outline-danger">Sign Out</button>
+            <button id="menu-signout" class="btn-outline-danger">
+              Sign Out
+            </button>
           </li>
         </ul>
         <form class="form-inline my-2 my-lg-0 modal-menus-post-auth">
@@ -65,6 +73,37 @@
       </div>
     </nav>
 
+    <!--popup dialog box-->
+    <!-- Modal -->
+    <div
+      class="modal fade"
+      id="modal-popupinfo"
+      data-backdrop="static"
+      data-keyboard="false"
+      tabindex="-1"
+      aria-labelledby="staticBackdropLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="modal-popupinfo-title"></h5>
+          </div>
+          <div id="modal-popupinfo-body" class="modal-body">...</div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-dismiss="modal"
+            >
+              Close
+            </button>
+            <button type="button" class="btn btn-primary">Understood</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <!-- Modal Sign In-->
     <!-- Modal -->
     <div
@@ -79,7 +118,9 @@
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title" id="modal-singin-form-label">Sign in, Please</h5>
+            <h5 class="modal-title" id="modal-singin-form-label">
+              Sign in, Please
+            </h5>
             <button
               type="button"
               class="close"
@@ -92,13 +133,15 @@
           <div class="modal-body">
             <form id="form-signin" method="POST">
               <div>
-                <input type="email" name="email" placeholder="emaill address">
+                <input type="email" name="email" placeholder="emaill address" />
               </div>
               <div>
-                <input type="password" name="password" placeholder="password">
+                <input type="password" name="password" placeholder="password" />
               </div>
               <div>
-                <button type="submit" class="btn-outline-primary">Sign In</button>
+                <button type="submit" class="btn-outline-primary">
+                  Sign In
+                </button>
               </div>
             </form>
           </div>
