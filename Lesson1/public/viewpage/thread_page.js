@@ -43,5 +43,22 @@ export async function thread_page(threadID){
     <div class="bg-secondary text-white">${thread.content}</div>
     `;
 
+    html += `<div id="message-reply-body">`
+
+    html += `</div>`
+
+    html += `<div>
+                <textarea id="textarea-add-new-message" placeholder="Reply to this message"></textarea>
+                <br>
+                <button id="button-add-new-message" class="btn btn-outline-info">Post message</button>
+            </div>`
+
     Element.mainContent.innerHTML = html
+
+    document.getElementById('button-add-new-message').addEventListener('click', () => {
+        const content = document.getElementById('textarea-add-new-message').value
+        const uid = Auth.currentUser.uid
+        const email = Auth.currentUser.email
+        const timestamp = Date.now()
+    })
 }

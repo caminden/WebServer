@@ -19,6 +19,11 @@ input {
     width: 100%;
 }
 
+textarea {
+    width: 95%;
+    min-height: 150px;
+}
+
 .modal-menus-pre-auth {
     display: block;
 
