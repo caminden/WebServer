@@ -1,4 +1,5 @@
 import * as Constant from "../model/constant.js";
+import { Message } from "../model/message.js";
 import { Thread } from "../model/thread.js";
 
 export async function signIn(email, password) {
@@ -20,7 +21,9 @@ export async function addThread(thread) {
 
 export async function getThreadList() {
   let threadList = [];
-  const snapShot = await firebase.firestore().collection(Constant.collectionName.THREAD)
+  const snapShot = await firebase
+    .firestore()
+    .collection(Constant.collectionName.THREAD)
     .orderBy("timestamp", "desc")
     .get();
   snapShot.forEach((doc) => {
@@ -28,15 +31,39 @@ export async function getThreadList() {
     t.docId = doc.id;
     threadList.push(t);
   });
-  return threadList
+  return threadList;
 }
 
 export async function getOneThread(threadID) {
   const ref = await firebase
     .firestore()
     .collection(Constant.collectionName.THREAD)
-    .doc(threadID).get();
+    .doc(threadID)
+    .get();
   const t = new Thread(ref.data());
   t.docID = threadID;
-    return t
+  return t;
+}
+
+export async function addMessage(message) {
+  const ref = await firebase
+    .firestore()
+    .collection(Constant.collectionName.MESSAGES)
+    .add(message.serialize());
+  return ref.id;
+}
+
+export async function getMessageList(threadID){
+    const snapShot = await firebase.firestore().collection(Constant.collectionName.MESSAGES)
+    .where('threadID', "==", threadID)
+    .orderBy('timestamp')
+    .get()
+
+    const messages = []
+    snapShot.forEach(doc => {
+        const m = new Message(doc.data())
+        m.docId = doc.id
+        messages.push(m)
+    })
+    return messages
 }

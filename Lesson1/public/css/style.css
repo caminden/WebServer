@@ -24,6 +24,10 @@ textarea {
     min-height: 150px;
 }
 
+hr {
+    padding-bottom: 15px;
+}
+
 .modal-menus-pre-auth {
     display: block;
 

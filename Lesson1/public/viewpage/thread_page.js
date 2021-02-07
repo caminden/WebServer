@@ -3,6 +3,7 @@ import * as Element from '../viewpage/element.js'
 import * as FirebaseController from "../controller/firebase_controller.js"
 import * as Constant from "../model/constant.js"
 import * as Util from "../viewpage/util.js"
+import { Message } from '../model/message.js'
 
 export function addThreadViewEvents(){
     const viewForms = document.getElementsByClassName('thread-view-form')
@@ -22,15 +23,16 @@ export async function thread_page(threadID){
     }
 
     //1. get thread from firestore
-    //2. get allr eply messages
+    //2. get all reply messages
     //3. display this thread
     //4. display all replies
     //5. a form to add a new reply
 
     let thread
-
+    let messages
     try {
         thread = await FirebaseController.getOneThread(threadID)
+        messages = await FirebaseController.getMessageList(threadID)
     }catch(e){
         if(Constant.DEV) console.log(e)
         Util.popupInfo('Error', JSON.stringify(e))
@@ -40,11 +42,16 @@ export async function thread_page(threadID){
     let html = `
     <h4 class="bg-primary text-white">${thread.title}</h4>
     <div>${thread.email} (At ${new Date(thread.timestamp).toString()})</div>
-    <div class="bg-secondary text-white">${thread.content}</div>
+    <div class="bg-light text-black">${thread.content}</div>
+    <hr>
     `;
 
     html += `<div id="message-reply-body">`
-
+            if(messages && messages.length > 0){
+                messages.forEach(m => {
+                    html += buildMessageView(m)
+                })
+            }
     html += `</div>`
 
     html += `<div>
@@ -55,10 +62,39 @@ export async function thread_page(threadID){
 
     Element.mainContent.innerHTML = html
 
-    document.getElementById('button-add-new-message').addEventListener('click', () => {
+    document.getElementById('button-add-new-message').addEventListener('click', async () => {
         const content = document.getElementById('textarea-add-new-message').value
         const uid = Auth.currentUser.uid
         const email = Auth.currentUser.email
         const timestamp = Date.now()
+
+        const m = new Message({
+            uid, email, timestamp, content, threadID
+        })
+
+        try{
+            const docId = await FirebaseController.addMessage(m)
+            m.docId = docId
+        }catch(e){
+            if(Constant.DEV) console.log(e)
+            Util.popupInfo("Error", JSON.stringify(e))
+        }
+
+        const mTag = document.createElement('div')
+        mTag.innerHTML = buildMessageView(m)
+        document.getElementById('message-reply-body').appendChild(mTag)
+
+        document.getElementById('textarea-add-new-message').value = ''
     })
+}
+
+function buildMessageView(message){
+    return `
+        <div class="bg-info text-white">
+            Replied by ${message.email} (At ${new Date(message.timestamp).toString()})
+            <br>
+            ${message.content}
+        </div>
+        <hr>
+    `
 }
