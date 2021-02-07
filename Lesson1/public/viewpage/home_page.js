@@ -5,6 +5,7 @@ import * as Constant from "../model/constant.js";
 import { Thread } from "../model/thread.js";
 import * as FirebaseController from "../controller/firebase_controller.js";
 import * as Util from "./util.js";
+import * as ThreadPage from './thread_page.js'
 
 export function addEventListener() {
   Element.menuHome.addEventListener("click", () => {
@@ -33,10 +34,17 @@ export function addEventListener() {
     try {
       const docId = await FirebaseController.addThread(thread);
       thread.docId = docId;
-      home_page() //to refresh after adding new thread, will improve later
+      //home_page() //to refresh after adding new thread, will improve later
+      const trTag = document.createElement('tr')
+      trTag.innerHTML = buildThreadView(thread)
+      const threadBodyTag = document.getElementById("thread-body-tag")
+      threadBodyTag.prepend(trTag)
+      Element.formCreateThread.reset()
+
       Util.popupInfo("Success", 'A new thread has been created', Constant.IdmodalCreateNewThread)
     } catch (e) {
-      console.log(e);
+      if(Constant.DEV)console.log(e);
+      Util.popupInfo("Failed to add", JSON.stringify(e))
     }
   });
 }
@@ -51,7 +59,8 @@ export async function home_page() {
   try {
     threadList = await FirebaseController.getThreadList();
   } catch (e) {
-    console.log(e);
+    if(Constant.DEV) console.log(e);
+    Util.popupInfo("Failed to get threads", JSON.stringify(e))
   }
 
   let html = `
@@ -59,7 +68,7 @@ export async function home_page() {
   `;
 
   html += `
-  <table class="table">
+  <table class="table table-striped">
   <thead>
     <tr>
       <th scope="col">Action</th>
@@ -70,11 +79,11 @@ export async function home_page() {
       <th scope="col">Posted At</th>
     </tr>
   </thead>
-  <tbody>
+  <tbody id ="thread-body-tag">
   `;
 
   threadList.forEach((thread) => {
-    html += buildThreadView(thread);
+    html += '<tr>' + buildThreadView(thread) + '</tr>';
   });
 
   html += `
@@ -82,18 +91,23 @@ export async function home_page() {
   `;
 
   Element.mainContent.innerHTML = html;
+
+  ThreadPage.addThreadViewEvents()
 }
 
 function buildThreadView(thread) {
   return `
-    <tr>
+      <td>
+          <form method="post" class="thread-view-form">
+              <input type="hidden" name="threadID" value="${thread.docId}">
+              <button type="submit" class="btn btn-outline-primary">View</button>
+          </form>
+      </td>
       <td>View</td>
       <td>${thread.title}</td>
       <td>${thread.keywordsArray.join("")}</td>
       <td>${thread.email}</td>
       <td>${thread.content}</td>
       <td>${new Date(thread.timestamp).toString()}</td>
-
-    </tr>
-  `;
+  `
 }

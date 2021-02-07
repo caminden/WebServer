@@ -18,7 +18,7 @@ export function addEventListener() {
         $('#'+Constant.IdmodalSigninForm).modal('hide')
         
     }catch(e){
-        console.log(e)
+        if(Constant.DEV) console.log(e)
         Util.popupInfo("Sign in Error", JSON.stringify(e), Constant.IdmodalSigninForm)
     }
   });
@@ -27,7 +27,8 @@ export function addEventListener() {
       try{  
         await FirebaseController.signOut()
       }catch(e){
-        console.log(e)
+        if(Constant.DEV) console.log(e)
+        Util.popupInfo("Sign out error", JSON.stringify(e))
       }
   })
 
