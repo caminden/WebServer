@@ -28,6 +28,10 @@ hr {
     padding-bottom: 15px;
 }
 
+.error-signup {
+    color: red
+}
+
 .modal-menus-pre-auth {
     display: block;
 
