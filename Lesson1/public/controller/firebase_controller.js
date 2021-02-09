@@ -40,6 +40,9 @@ export async function getOneThread(threadID) {
     .collection(Constant.collectionName.THREAD)
     .doc(threadID)
     .get();
+    if(!ref.exists){
+      return null
+    }
   const t = new Thread(ref.data());
   t.docID = threadID;
   return t;

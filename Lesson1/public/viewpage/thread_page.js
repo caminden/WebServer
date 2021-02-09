@@ -4,21 +4,32 @@ import * as FirebaseController from "../controller/firebase_controller.js"
 import * as Constant from "../model/constant.js"
 import * as Util from "../viewpage/util.js"
 import { Message } from '../model/message.js'
+import * as Routes from '../controller/routes.js'
 
 export function addThreadViewEvents(){
     const viewForms = document.getElementsByClassName('thread-view-form')
     for (let n = 0; n < viewForms.length; n++){
-        viewForms[n].addEventListener('submit', e=>{
-            e.preventDefault()
-            const threadID = e.target.threadID.value
-            thread_page(threadID)
-        })
+        addThreadFormEvent(viewForms[n])
     }
+}
+
+export function addThreadFormEvent(form){
+    form.addEventListener('submit', e=>{
+        e.preventDefault()
+        const threadID = e.target.threadID.value
+        history.pushState(null, null, Routes.routePath.THREAD + '#' + threadID)
+        thread_page(threadID)
+    })
 }
 
 export async function thread_page(threadID){
     if(!Auth.currentUser){
         Element.mainContent.innerHTML = '<h1>Protected Page</h1>'
+        return
+    }
+
+    if(!threadID){
+        Util.popupInfo("Error", "Invalid Access to thread")
         return
     }
 
@@ -32,6 +43,10 @@ export async function thread_page(threadID){
     let messages
     try {
         thread = await FirebaseController.getOneThread(threadID)
+        if(!thread){
+            Util.popupInfo("Error", "Thread does not exist")
+            return
+        }
         messages = await FirebaseController.getMessageList(threadID)
     }catch(e){
         if(Constant.DEV) console.log(e)
@@ -90,9 +105,10 @@ export async function thread_page(threadID){
 
 function buildMessageView(message){
     return `
+        <div class="border border-primary">
         <div class="bg-info text-white">
             Replied by ${message.email} (At ${new Date(message.timestamp).toString()})
-            <br>
+        </div>
             ${message.content}
         </div>
         <hr>
