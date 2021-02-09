@@ -53,7 +53,6 @@ export function addEventListener() {
         for(let i = 0; i < elements.length; i++) elements[i].style.display = 'none'
 
         history.pushState(null, null, Routes.routePath.HOME)
-        Element.mainContent.innerHTML = '<h1>Signed Out</h1>'
       }
   })
 }
