@@ -63,11 +63,19 @@ export async function home_page() {
   } catch (e) {
     if(Constant.DEV) console.log(e);
     Util.popupInfo("Failed to get threads", JSON.stringify(e))
+    return
   }
+  buildHomeScreen(threadList, true)
+}
 
-  let html = `
+
+export function buildHomeScreen(threadList, newButton){
+  let html = ``
+  if(newButton){
+    html = `
     <button class="btn btn-outline-danger" data-toggle="modal" data-target="#${Constant.IdmodalCreateNewThread}">+ New Thread</button>
-  `;
+    `;
+  }
 
   html += `
   <table class="table table-striped">
@@ -91,6 +99,10 @@ export async function home_page() {
   html += `
     </body></table>
   `;
+
+  if(threadList.length == 0){
+    html += `<h4>No Threads Found</h4>`
+  }
 
   Element.mainContent.innerHTML = html;
 
