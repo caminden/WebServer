@@ -46,7 +46,8 @@ export function addEventListener() {
       Util.popupInfo("Success", 'A new thread has been created', Constant.IdmodalCreateNewThread)
     } catch (e) {
       if(Constant.DEV)console.log(e);
-      Util.popupInfo("Failed to add", JSON.stringify(e))
+      Util.popupInfo("Failed to add", JSON.stringify(e), Constant.IdmodalCreateNewThread)
+      return
     }
   });
 }

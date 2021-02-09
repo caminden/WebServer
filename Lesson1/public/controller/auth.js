@@ -12,6 +12,9 @@ export function addEventListener() {
     const email = Element.formSignin.email.value;
     const password = Element.formSignin.password.value;
 
+    const button = Element.formSignin.getElementsByTagName("button")[0]
+    const originalLabel = Util.disableButton(button)
+
     try {
       await FirebaseController.signIn(email, password);
       //dismiss modal
@@ -24,6 +27,8 @@ export function addEventListener() {
         Constant.IdmodalSigninForm
       );
     }
+
+    Util.enableButton(button, originalLabel)
   });
 
   Element.menuSignout.addEventListener("click", async (e) => {
@@ -62,7 +67,7 @@ export function addEventListener() {
     }
   });
 
-  Element.formSignUp.addEventListener("submit", async e=> {
+  Element.formSignUp.addEventListener("submit", async e  => {
     e.preventDefault()
     const email = e.target.email.value;
     const password = e.target.password.value;
