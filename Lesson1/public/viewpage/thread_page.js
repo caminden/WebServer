@@ -14,11 +14,15 @@ export function addThreadViewEvents(){
 }
 
 export function addThreadFormEvent(form){
-    form.addEventListener('submit', e=>{
+    form.addEventListener('submit', async e=>{
         e.preventDefault()
+        const button = e.target.getElementsByTagName('button')[0]
+        const label = Util.disableButton(button)
         const threadID = e.target.threadID.value
         history.pushState(null, null, Routes.routePath.THREAD + '#' + threadID)
         thread_page(threadID)
+        await Util.sleep(1000)
+        Util.enableButton(button, label)
     })
 }
 
@@ -87,6 +91,9 @@ export async function thread_page(threadID){
             uid, email, timestamp, content, threadID
         })
 
+        const button = document.getElementById('button-add-new-message')
+        const label = Util.disableButton(button)
+
         try{
             const docId = await FirebaseController.addMessage(m)
             m.docId = docId
@@ -100,6 +107,8 @@ export async function thread_page(threadID){
         document.getElementById('message-reply-body').appendChild(mTag)
 
         document.getElementById('textarea-add-new-message').value = ''
+
+        Util.enableButton(button, label)
     })
 }
 

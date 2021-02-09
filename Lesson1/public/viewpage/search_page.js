@@ -7,17 +7,21 @@ import * as Home from "./home_page.js"
 import * as Routes from "../controller/routes.js"
 
 export function addEventListeners(){
-    Element.formSearch.addEventListener('submit', e =>{
+    Element.formSearch.addEventListener('submit', async e =>{
         e.preventDefault()
         const keywords = e.target.searchKeywords.value.trim()
         if(keywords.length == 0){
             Util.popupInfo("No search keywords", "Enter search keyword(s) to search")
             return
         }
+        const button = Element.formSearch.getElementsByTagName('button')[0]
+        const label = Util.disableButton(button)
         const keywordsArray = keywords.toLowerCase().match(/\S+/g)
         const joinedSearchKeys = keywordsArray.join('+')
         history.pushState(null, null, Routes.routePath.SEARCH + '#' + joinedSearchKeys)
         search_page(keywordsArray)
+        //await Util.sleep(1000) for testing purpose only
+        Util.enableButton(button, label)
     })
 }
 

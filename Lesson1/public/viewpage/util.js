@@ -23,3 +23,7 @@ export function enableButton(button, originalLabel){
     if(originalLabel) button.innerHTML = originalLabel
     button.disabled = false
 }
+
+export function sleep(ms){
+    return new Promise(resolve => setTimeout(resolve, ms))
+}
