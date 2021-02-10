@@ -5,7 +5,7 @@
     ]
   },
   "hosting": {
-    "site": "l1p1-cdefghijklm",
+    "site": "l1p2-cdefghijklm",
     "public": "public",
     "ignore": [
       "firebase.json",
