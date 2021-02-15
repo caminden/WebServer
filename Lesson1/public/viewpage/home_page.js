@@ -27,6 +27,7 @@ export function addEventListener() {
     const content = Element.formCreateThread.content.value;
     const keywords = Element.formCreateThread.keywords.value;
     const keywordsArray = keywords.toLowerCase().match(/\S+/g);
+    const likes = 0;
     const thread = new Thread({
       uid,
       email,
@@ -34,6 +35,7 @@ export function addEventListener() {
       keywordsArray,
       content,
       timestamp,
+      likes,
     });
 
     try {

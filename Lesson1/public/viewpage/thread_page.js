@@ -21,7 +21,7 @@ export function addThreadFormEvent(form){
         const threadID = e.target.threadID.value
         history.pushState(null, null, Routes.routePath.THREAD + '#' + threadID)
         thread_page(threadID)
-        await Util.sleep(1000)
+        //await Util.sleep(1000) for testing purpose only
         Util.enableButton(button, label)
     })
 }
@@ -62,8 +62,15 @@ export async function thread_page(threadID){
     <h4 class="bg-primary text-white">${thread.title}</h4>
     <div>${thread.email} (At ${new Date(thread.timestamp).toString()})</div>
     <div class="bg-light text-black">${thread.content}</div>
-    <hr>
+    <button id="button1">Like</button> <span id="thread-likes">${thread.likes}</span>
+    <button id="button2">Dislike</button>
     `;
+
+    //display delete button if the thread owner is also the current one logged in
+    if(Auth.currentUser.email == thread.email){
+        html += `<button id="delete-thread-button" style="float: right">Delete</button>`
+    }
+    html += `<hr>`
 
     html += `<div id="message-reply-body">`
             if(messages && messages.length > 0){
@@ -109,6 +116,29 @@ export async function thread_page(threadID){
         document.getElementById('textarea-add-new-message').value = ''
 
         Util.enableButton(button, label)
+    })
+
+
+    document.getElementById("button1").addEventListener('click', async () => {
+        const likes = document.getElementById('thread-likes')
+        let newLikes
+        try{
+            newLikes = await FirebaseController.updateLikes(threadID, 1)
+        }catch(e){
+            if(Constant.DEV) console.log(e)
+        }
+        likes.innerHTML = `${newLikes}`
+    })
+
+    document.getElementById("button2").addEventListener('click', async () =>{
+        const likes = document.getElementById('thread-likes')
+        let newLikes
+        try{
+            newLikes = await FirebaseController.updateLikes(threadID, 0)
+        }catch(e){
+            if(Constant.DEV) console.log(e)
+        }
+        likes.innerHTML = `${newLikes}`
     })
 }
 

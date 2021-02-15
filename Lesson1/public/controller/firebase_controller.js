@@ -89,3 +89,25 @@ export async function searchThreads(keywordsArray) {
 export async function signUp(email, password){
     await firebase.auth().createUserWithEmailAndPassword(email, password)
 }
+
+export async function updateLikes(threadID, value){ 
+  //get existing document for old information
+  const ref = await firebase.firestore().collection(Constant.collectionName.THREAD)
+    .doc(threadID).get()  
+
+  //call firestore to set new data and merge all other information
+  if(value == 1){
+    await firebase.firestore().collection(Constant.collectionName.THREAD)
+    .doc(threadID).set({
+      likes: ref.data().likes + 1
+    }, {merge: true})
+    return ref.data().likes + 1;
+  }//value = 1 for likes, value=0 for dislikes
+  else{
+    await firebase.firestore().collection(Constant.collectionName.THREAD)
+    .doc(threadID).set({
+      likes: ref.data().likes - 1
+    }, {merge: true})
+    return ref.data().likes - 1;
+  }
+}

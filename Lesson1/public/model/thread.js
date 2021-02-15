@@ -6,6 +6,7 @@ export class Thread {
         this.timestamp = data.timestamp
         this.content = data.content
         this.keywordsArray = data.keywordsArray
+        this.likes = data.likes
     }
 
     serialize(){
@@ -15,7 +16,8 @@ export class Thread {
             title: this.title,
             timestamp: this.timestamp,
             content: this.content,
-            keywordsArray: this.keywordsArray
+            keywordsArray: this.keywordsArray,
+            likes: this.likes,
         }
     }
 }
