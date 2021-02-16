@@ -40,11 +40,21 @@
         <ul class="navbar-nav mr-auto">
           <li class="nav-item modal-menus-pre-auth">
             <button
-              class="btn-outline-warning"
+              class="btn btn-outline-warning"
               data-toggle="modal"
               data-target="#modal-signin-form"
             >
               Sign in
+            </button>
+          </li>
+          <li class="nav-item modal-menus-pre-auth">
+            <button
+              id=""
+              class="btn btn-outline-danger"
+              data-toggle="modal"
+              data-target="#modal-create-new-account"
+            >
+              Create a New Account
             </button>
           </li>
           <li class="nav-item modal-menus-post-auth">
@@ -54,7 +64,9 @@
             <button id="menu-about" class="btn-outline-primary">About</button>
           </li>
           <li class="nav-item modal-menus-post-auth">
-            <button id="profile-info" class="btn-outline-primary">Profile</button>
+            <button id="profile-info" class="btn-outline-primary">
+              Profile
+            </button>
           </li>
           <li class="nav-item modal-menus-post-auth">
             <button id="menu-signout" class="btn-outline-danger">
@@ -145,7 +157,7 @@
                 <input type="password" name="password" placeholder="password" />
               </div>
               <div>
-                <button type="submit"  class="btn-outline-primary">
+                <button type="submit" class="btn-outline-primary">
                   Sign In
                 </button>
               </div>
@@ -229,7 +241,9 @@
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title" id="modal-create-new-account-label">Create New Account</h5>
+            <h5 class="modal-title" id="modal-create-new-account-label">
+              Create New Account
+            </h5>
             <button
               type="button"
               class="close"
@@ -242,19 +256,25 @@
           <div class="modal-body">
             <form id="form-create-new-account" method="POST">
               <div>
-                <input type="email" name="email" placeholder="email address">
+                <input type="email" name="email" placeholder="email address" />
                 <p id="signup-error-email" class="error-signup"></p>
               </div>
               <div>
-                <input type="password" name="password" placeholder="password">
+                <input type="password" name="password" placeholder="password" />
                 <p id="signup-error-password" class="error-signup"></p>
               </div>
               <div>
-                <input type="password" name="passwordConfirm" placeholder="confirm password">
+                <input
+                  type="password"
+                  name="passwordConfirm"
+                  placeholder="confirm password"
+                />
                 <p id="signup-error-passwordConfirm" class="error-signup"></p>
               </div>
               <div>
-                <button type="submit" class="btn btn-outline-primary">Create</button>
+                <button type="submit" class="btn btn-outline-primary">
+                  Create
+                </button>
               </div>
             </form>
           </div>
@@ -264,15 +284,17 @@
 
     <div id="main-content" class="jumbotron modal-menus-post-auth"></div>
     <div class="modal-menus-pre-auth">
-      Welcome to Awesome Discussion Forum <br />
-      Please Sign in
-      <ul>
-        <li>to create new threads</li>
-        <li>to browse threads</li>
-        <li>to reply to messages</li>
-      </ul>
-      No account yet?
-      <button id="" class="btn btn-outline-danger" data-toggle="modal" data-target="#modal-create-new-account">Create a New Account</button>
+      <h1 style="text-align: center;">Welcome to Awesome Discussion Forum</h1>
+      <br />
+      <div class="jumbotron">
+        <h3>Please Sign in</h3>
+        <ul>
+          <li>to create new threads</li>
+          <li>to browse threads</li>
+          <li>to reply to messages</li>
+        </ul>
+        <p>No account yet? Sign up at the top!</p>
+      </div>
     </div>
 
     <!-- update the version number as needed -->
