@@ -5,6 +5,7 @@ import * as Constant from "../model/constant.js"
 import * as Util from "../viewpage/util.js"
 import { Message } from '../model/message.js'
 import * as Routes from '../controller/routes.js'
+import { home_page } from './home_page.js'
 
 export function addThreadViewEvents(){
     const viewForms = document.getElementsByClassName('thread-view-form')
@@ -62,8 +63,8 @@ export async function thread_page(threadID){
     <h4 class="bg-primary text-white">${thread.title}</h4>
     <div>${thread.email} (At ${new Date(thread.timestamp).toString()})</div>
     <div class="bg-light text-black">${thread.content}</div>
-    <button id="button1">Like</button> <span id="thread-likes">${thread.likes}</span>
-    <button id="button2">Dislike</button>
+    <button id="button-like">Like</button> <span id="thread-likes">${thread.likes}</span>
+    <button id="button-dislike">Dislike</button>
     `;
 
     //display delete button if the thread owner is also the current one logged in
@@ -118,8 +119,8 @@ export async function thread_page(threadID){
         Util.enableButton(button, label)
     })
 
-
-    document.getElementById("button1").addEventListener('click', async () => {
+    //new buttons for like/dislike
+    document.getElementById("button-like").addEventListener('click', async () => {
         const likes = document.getElementById('thread-likes')
         let newLikes
         try{
@@ -130,7 +131,7 @@ export async function thread_page(threadID){
         likes.innerHTML = `${newLikes}`
     })
 
-    document.getElementById("button2").addEventListener('click', async () =>{
+    document.getElementById("button-dislike").addEventListener('click', async () =>{
         const likes = document.getElementById('thread-likes')
         let newLikes
         try{
@@ -139,6 +140,20 @@ export async function thread_page(threadID){
             if(Constant.DEV) console.log(e)
         }
         likes.innerHTML = `${newLikes}`
+    })
+
+    document.getElementById('delete-thread-button').addEventListener('click', async () => {
+        const button = document.getElementById("delete-thread-button")
+        const label = Util.disableButton(button)
+        try{
+            await FirebaseController.deleteThread(threadID)
+        }catch(e){
+            if(Constant.DEV) console.log(e)
+        }
+        Util.popupInfo("Delete Successful", "Thread has been deleted")
+        Util.enableButton(button, label)
+        history.replaceState(null, null, Routes.routePath.HOME)
+        home_page();
     })
 }
 

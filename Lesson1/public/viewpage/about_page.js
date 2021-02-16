@@ -11,8 +11,13 @@ export function addEventListener() {
 
 export function about_page() {
   if (!Auth.currentUser) {
-    Element.mainContent.innerHTML = "<h1>Protected Page</h1>";
+    Element.
     return;
   }
-  Element.mainContent.innerHTML = "<h1>About Page</h1>";
+  let html = `<h1>About Page</h1>`
+
+
+  
+  Element.mainContent.innerHTML = html;
+
 }
