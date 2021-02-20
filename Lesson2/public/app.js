@@ -12,3 +12,9 @@ window.onload = () => {
     const href = window.location.href
     Routes.routing(pathname, href)
 }
+
+
+//add event handlers from all modules
+import * as Auth from './controller/auth.js'
+
+Auth.addEventListeners();
