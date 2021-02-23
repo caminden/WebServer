@@ -128,17 +128,23 @@
         <form id="form-add-product" method="post">
           <div>
               <input type="text" name="name" placeholder="product name">
+              <p id="error-add-name" class="error-add-product"></p>
           </div>
           <div>
               <input type="text" name="price" placeholder="price ($)">
+              <p id="error-add-price" class="error-add-product"></p>
           </div>
           <div>
             Summary: <br><textarea name="summary"></textarea>
+            <p id="error-add-summary" class="error-add-product"></p>
+
         </div>
         <div>
           Image:
           <img id="form-add-img-tag" style="display: block;">
           <input id="form-add-img-button" type="file" value="upload">
+          <p id="error-add-image" class="error-add-product"></p>
+
         </div>
           <div>
               <button type="submit" class="btn btn-outline-primary">Add</button>
