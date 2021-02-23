@@ -16,5 +16,7 @@ window.onload = () => {
 
 //add event handlers from all modules
 import * as Auth from './controller/auth.js'
+import * as Add from './controller/add_product.js'
 
 Auth.addEventListeners();
+Add.addEventListeners();

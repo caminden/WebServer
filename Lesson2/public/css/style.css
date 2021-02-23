@@ -25,3 +25,8 @@ input{
 li {
     margin-right: 15px;
 }
+
+textarea{
+    width: 100%;
+    min-height: 150px;
+}
