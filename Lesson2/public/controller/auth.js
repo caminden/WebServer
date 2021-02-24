@@ -32,7 +32,7 @@ export function addEventListeners(){
     })
 
     firebase.auth().onAuthStateChanged(user =>{
-        if(user){
+        if(user && Constant.adminEmails.includes(user.email)){
             currentUser = user
             let elements = document.getElementsByClassName("modal-pre-auth")
             for(let i = 0;  i < elements.length; i++){

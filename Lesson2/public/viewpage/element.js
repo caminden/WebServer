@@ -3,6 +3,8 @@ export const popupInfoBody = document.getElementById('modal-popup-info-body')
 
 
 export const menuButtonSignout = document.getElementById("menu-button-signout")
+export const menuProducts = document.getElementById('menu-button-products')
+export const menuHome = document.getElementById('menu-button-home')
 
 export const formAddProductError = {
     name: document.getElementById('error-add-name'),
