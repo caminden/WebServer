@@ -25,8 +25,10 @@ import * as Auth from './controller/auth.js'
 import * as Add from './controller/add_product.js'
 import * as Product from './viewpage/product_page.js'
 import * as Home from './viewpage/home_page.js'
+import * as Edit from './controller/edit_product.js'
 
 Auth.addEventListeners();
 Add.addEventListeners();
 Product.addEventListeners();
 Home.addEventListeners();
+Edit.addEventListeners();

@@ -4,6 +4,7 @@ import * as Add from "../controller/add_product.js";
 import * as Util from "./util.js";
 import * as Routes from "../controller/routes.js";
 import * as Constant from "../model/constant.js";
+import * as Edit from '../controller/edit_product.js'
 
 export function addEventListeners() {
   Element.menuProducts.addEventListener("click", async (e) => {
@@ -44,6 +45,18 @@ export async function product_page() {
       Add.resetImageSelection();
       $("#modal-add-product").modal("show");
     });
+
+  const editButtons = document.getElementsByClassName("form-edit-product")
+  for(let i = 0; i < editButtons.length; i++){
+    editButtons[i].addEventListener('submit', e => {
+      e.preventDefault();
+      
+      const button = e.target.getElementsByTagName('button')[0]
+      const label = Util.disableButton(button)
+      Edit.editProduct(e.target.docId.value)
+      Util.enableButton(button, label)
+    })
+  }
 }
 
 function buildProductCard(product) {
@@ -54,6 +67,10 @@ function buildProductCard(product) {
          <h5 class="card-title">${product.name}</h5>
          <p class="card-text">$${product.price}<br>${product.summary}</p>
       </div>
+      <form class="form-edit-product" method="post">
+        <input type="hidden" name="docId" value="${product.docId}">
+        <button class="btn btn-outline-primary" type="submit">Edit</button>
+      </form>
    </div>
    `;
 }

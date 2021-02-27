@@ -39,3 +39,22 @@ export async function getProductList() {
     })
     return products
 }
+
+const cf_getProductById = firebase.functions().httpsCallable("admin_getProductById")
+export async function getProductById(docId){
+  const result = await cf_getProductById(docId)
+  if(result.data){
+    const product = new Product(result.data)
+    product.docId = result.data.docId
+    return product
+  }
+  else return null
+}
+
+
+const cf_updateProduct = firebase.functions().httpsCallable("admin_updateProduct")
+export async function updateProduct(product){
+  const docId = product.docId
+  const data = product.serializeForUpdate()
+  await cf_addProduct({docId, data})
+}
