@@ -34,3 +34,7 @@ textarea{
 .error-add-product{
     color: red;
 }
+
+.error-edit-product{
+    color: red;
+}

@@ -57,19 +57,35 @@ export async function product_page() {
       Util.enableButton(button, label)
     })
   }
+
+  const deleteButtons = document.getElementsByClassName("form-delete-product")
+  for(let i = 0; i < deleteButtons.length; i++){
+    deleteButtons[i].addEventListener('submit', async e => {
+      e.preventDefault();
+      const button = e.target.getElementsByTagName('button')[0]
+      const label = Util.disableButton(button)
+      Edit.deleteProduct(e.target.docId.value, e.target.imageName.value)
+      Util.enableButton(button, label)
+    })
+  }
 }
 
 function buildProductCard(product) {
   return `
-   <div class="card" style="width: 18rem; display: inline-block">
+   <div id="card-${product.docId}" class="card" style="width: 18rem; display: inline-block">
    <img src=${product.imageURL} class="card-img-top">
       <div class="card-body">
          <h5 class="card-title">${product.name}</h5>
          <p class="card-text">$${product.price}<br>${product.summary}</p>
       </div>
-      <form class="form-edit-product" method="post">
+      <form class="form-edit-product float-left" method="post">
         <input type="hidden" name="docId" value="${product.docId}">
         <button class="btn btn-outline-primary" type="submit">Edit</button>
+      </form>
+      <form class="form-delete-product float-right" method="post">
+        <input type="hidden" name="docId" value="${product.docId}">
+        <input type="hidden" name="imageName" value="${product.imageName}">
+        <button class="btn btn-outline-danger" type="submit">Delete</button>
       </form>
    </div>
    `;

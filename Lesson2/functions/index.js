@@ -17,6 +17,7 @@ exports.admin_addProduct = functions.https.onCall(addProduct);
 exports.admin_getProductList = functions.https.onCall(getProductList);
 exports.admin_getProductById = functions.https.onCall(getProductById);
 exports.admin_updateProduct = functions.https.onCall(updateProduct);
+exports.admin_deleteProduct = functions.https.onCall(deleteProduct);
 
 function isAdmin(email) {
   return Constant.adminEmails.includes(email);
@@ -107,5 +108,22 @@ async function updateProduct(productInfo, context){
   }catch(e){
     if (Constant.DEV) console.log(e);
     throw new functions.https.HttpsError("internal", "updateProduct failed");
+  }
+}
+
+async function deleteProduct(docId, context){
+  if (!isAdmin(context.auth.token.email)) {
+    if (Constant.DEV) console.log("not admit: ", context.auth.token.email);
+    throw new functions.https.HttpsError(
+      "unauthenticated",
+      "You do not have these priviledges"
+    );
+  }
+  try{
+    await admin.firestore().collection(Constant.collectionName.PRODUCTS)
+            .doc(docId).delete()
+  }catch(e){
+    if (Constant.DEV) console.log(e);
+    throw new functions.https.HttpsError("internal", "deleteProduct failed");
   }
 }

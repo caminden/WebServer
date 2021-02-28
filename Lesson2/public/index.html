@@ -59,7 +59,7 @@
             </button>
           </li>
           <li class="nav-item">
-            <button class="btn btn-outline-primary modal-post-auth">
+            <button id="menu-button-users" class="btn btn-outline-primary modal-post-auth">
               Users
             </button>
           </li>
@@ -248,13 +248,16 @@
               <div>
                 Name:
                 <input type="text" name="name"/>
+                <p id="error-edit-name" class="error-edit-product"></p>
               </div>
               <div>
                 Price:
-                <input type="text" name="price"/>                
+                <input type="text" name="price"/>    
+                <p id="error-edit-price" class="error-edit-product"></p>            
               </div>
               <div>
-                Summary: <br /><textarea name="summary"></textarea>             
+                Summary: <br /><textarea name="summary"></textarea>
+                <p id="error-edit-summary" class="error-edit-product"></p>             
               </div>
               <div>
                 Image:
