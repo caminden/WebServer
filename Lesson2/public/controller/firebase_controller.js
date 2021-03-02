@@ -74,3 +74,20 @@ export async function deleteProduct(docId, imageName) {
     .child(Constant.storageFolderName.PRODUCT_IMAGES + imageName);
   await ref.delete();
 }
+
+const cf_getUserList = firebase.functions().httpsCallable("admin_getUserList");
+export async function getUserList() {
+  const result = await cf_getUserList();
+  return result.data;
+}
+
+
+const cf_updateUser = firebase.functions().httpsCallable("admin_updateUser");
+export async function updateUser(uid, update){
+  await cf_updateUser({uid, update})
+}
+
+const cf_deleteUser = firebase.functions().httpsCallable("admin_deleteUser")
+export async function deleteUser(uid){
+  await cf_deleteUser(uid);
+}
