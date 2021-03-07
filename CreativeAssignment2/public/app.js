@@ -6,7 +6,7 @@ import * as Search from './viewpage/search_page.js'
 
 Auth.addEventListener()
 Home.addEventListener()
-About.addEventListener()
+About.addEventListeners()
 Search.addEventListeners()
 
 window.onload = () => {

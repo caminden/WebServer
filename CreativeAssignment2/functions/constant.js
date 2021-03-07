@@ -8,5 +8,6 @@ exports.DEV = true;
 
 exports.collectionName = { 
     MESSAGES: "messages",
-    THREAD: "threads" 
+    THREAD: "threads",
+    RULES: "rules",
 };

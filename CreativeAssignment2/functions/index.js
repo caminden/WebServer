@@ -18,9 +18,10 @@ const Const = require("./constant");
 
 exports.admin_isAdmin = functions.https.onCall(isAdmin);
 exports.admin_deleteMessage = functions.https.onCall(deleteMessage);
+exports.admin_addRules = functions.https.onCall(addRules);
 
-function cfCheckAdmin(email){
-  return Const.adminEmails.includes(email)
+function cfCheckAdmin(email) {
+  return Const.adminEmails.includes(email);
 }
 
 async function isAdmin(email, context) {
@@ -28,14 +29,14 @@ async function isAdmin(email, context) {
 }
 
 async function deleteMessage(theadID, context) {
-  if(!cfCheckAdmin(context.auth.token.email)){
-    if (Constant.DEV) console.log("not admit: ", context.auth.token.email);
+  if (!cfCheckAdmin(context.auth.token.email)) {
+    if (Const.DEV) console.log("not admit: ", context.auth.token.email);
     throw new functions.https.HttpsError(
       "unauthenticated",
       "You do not have these priviledges"
     );
   }
-  
+
   await admin
     .firestore()
     .collection(Const.collectionName.MESSAGES)
@@ -55,4 +56,20 @@ async function deleteMessage(theadID, context) {
     .collection(Const.collectionName.THREAD)
     .doc(theadID)
     .delete();
+}
+
+async function addRules(data, context) {
+  if (!cfCheckAdmin(context.auth.token.email)) {
+    if (Const.DEV) console.log("not admit: ", context.auth.token.email);
+    throw new functions.https.HttpsError(
+      "unauthenticated",
+      "You do not have these priviledges"
+    );
+  }
+
+  try {
+    await admin.firestore().collection(Const.collectionName.RULES).add(data);
+  } catch (e) {
+    if (Const.DEV) console.log(e);
+  }
 }

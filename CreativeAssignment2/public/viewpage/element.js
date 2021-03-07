@@ -8,6 +8,8 @@ export const formSignin = document.getElementById("form-signin")
 export const formCreateThread = document.getElementById("form-create-thread")
 export const formSearch = document.getElementById('form-search')
 export const formSignUp = document.getElementById("modal-create-new-account")
+export const formCreateRule = document.getElementById("form-create-new-rule")
+
 
 //main content of pages
 export const mainContent = document.getElementById("main-content")

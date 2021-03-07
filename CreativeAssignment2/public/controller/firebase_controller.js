@@ -1,6 +1,7 @@
 import * as Constant from "../model/constant.js";
 import { Message } from "../model/message.js";
 import { Thread } from "../model/thread.js";
+import { Rules } from "../model/rules.js";
 
 export async function signIn(email, password) {
   await firebase.auth().signInWithEmailAndPassword(email, password);
@@ -96,11 +97,29 @@ export async function signUp(email, password) {
 
 const cf_isAdmin = firebase.functions().httpsCallable("admin_isAdmin");
 export async function isAdmin(email) {
-  const result = await cf_isAdmin(email)
+  const result = await cf_isAdmin(email);
   return result;
 }
 
-const cf_deleteMessage = firebase.functions().httpsCallable("admin_deleteMessage");
-export async function deleteMessage(theadID){
-    await cf_deleteMessage(theadID);
+const cf_deleteMessage = firebase
+  .functions()
+  .httpsCallable("admin_deleteMessage");
+export async function deleteMessage(theadID) {
+  await cf_deleteMessage(theadID);
+}
+
+const cf_addRules = firebase.functions().httpsCallable("admin_addRules");
+export async function addRules(rules) {
+  await cf_addRules(rules.serialize());
+}
+
+export async function getRules() {
+  let ruleList = [];
+  const snapShot = await firebase.firestore().collection(Constant.collectionName.RULES).get()
+  snapShot.forEach((doc) => {
+    const r = new Rules(doc.data())
+    r.docId = doc.docId
+    ruleList.push(r)
+  });
+  return ruleList;
 }

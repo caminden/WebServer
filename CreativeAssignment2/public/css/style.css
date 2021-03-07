@@ -40,3 +40,23 @@ hr {
 .modal-menus-post-auth {
     display: none;
 }
+
+h1 {
+    text-align: center;
+}
+
+span{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.card-header{
+    background-color: white;
+    font-size: 25px;
+    font-weight: bold;
+}
+
+.card-body{
+    background-color: whitesmoke;
+}
