@@ -59,7 +59,7 @@ export async function about_page() {
 
   try {
     const isAdmin = await FirebaseController.isAdmin(Auth.currentUser.email);
-    if (isAdmin.data) {
+    if (isAdmin) {
       html += `<span><button class="btn btn-outline-info" data-toggle="modal" data-target="#${Constant.IdModelCreateNewRule}">Add Rule</button></span>`;
     }
   } catch (e) {

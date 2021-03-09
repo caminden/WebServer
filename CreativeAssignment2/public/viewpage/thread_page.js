@@ -65,9 +65,10 @@ export async function thread_page(threadID) {
     <div class="bg-light text-black">${thread.content}</div>
     `;
 
+  let isAdmin = false
   try {
-    const isAdmin = await FirebaseController.isAdmin(Auth.currentUser.email);
-    if (isAdmin.data) {
+    isAdmin = await FirebaseController.isAdmin(Auth.currentUser.email);
+    if (isAdmin) {
       html += `<button class="btn btn-outline-danger float-right" id="button-delete-message">Delete</button>
         `;
     }
@@ -128,7 +129,8 @@ export async function thread_page(threadID) {
       Util.enableButton(button, label);
     });
 
-  document
+  if(isAdmin){
+    document
     .getElementById("button-delete-message")
     .addEventListener("click", async () => {
         const button = document.getElementById("button-delete-message")
@@ -143,6 +145,8 @@ export async function thread_page(threadID) {
         history.replaceState(null, null, Routes.routePath.HOME)
       home_page()
     });
+  }
+  
 }
 
 function buildMessageView(message) {

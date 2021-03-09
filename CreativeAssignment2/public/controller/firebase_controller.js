@@ -98,7 +98,7 @@ export async function signUp(email, password) {
 const cf_isAdmin = firebase.functions().httpsCallable("admin_isAdmin");
 export async function isAdmin(email) {
   const result = await cf_isAdmin(email);
-  return result;
+  return result.data;
 }
 
 const cf_deleteMessage = firebase
