@@ -38,25 +38,29 @@
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
           <li class="nav-item">
-            <button class="btn btn-outline-danger modal-pre-auth" data-toggle="modal" data-target="#modal-form-signin">
+            <button
+              class="btn btn-outline-danger modal-pre-auth"
+              data-toggle="modal"
+              data-target="#modal-form-signin"
+            >
               Sign in
             </button>
           </li>
           <li class="nav-item">
-            <button class="btn btn-outline-primary">Home</button>
+            <button id="menu-button-home" class="btn btn-outline-primary">Home</button>
           </li>
           <li class="nav-item">
-            <button class="btn btn-outline-primary modal-post-auth">
+            <button id="menu-button-purchases" class="btn btn-outline-primary modal-post-auth">
               Purchases
             </button>
           </li>
           <li class="nav-item">
-            <button class="btn btn-outline-primary modal-post-auth">
+            <button id="menu-button-profile" class="btn btn-outline-primary modal-post-auth">
               Profile
             </button>
           </li>
           <li class="nav-item">
-            <button class="btn btn-outline-danger modal-post-auth">
+            <button id="menu-button-signout" class="btn btn-outline-danger modal-post-auth">
               Sign out
             </button>
           </li>
@@ -88,20 +92,54 @@
             </button>
           </div>
           <div class="modal-body">
-              <form id="form-signin" method="POST">
-                <div>
-                    <input type="email" name="email" placeholder="email address">
-                </div>
-                <div>
-                    <input type="password" name="password" placeholder="password">
-                </div>
-                <div>
-                    <button type="submit" class="btn btn-outline-primary">Sign in</button>
-                </div>
-              </form>
+            <form id="form-signin" method="POST">
+              <div>
+                <input type="email" name="email" placeholder="email address" />
+              </div>
+              <div>
+                <input type="password" name="password" placeholder="password" />
+              </div>
+              <div>
+                <button type="submit" class="btn btn-outline-primary">
+                  Sign in
+                </button>
+              </div>
+            </form>
           </div>
         </div>
       </div>
+    </div>
+
+    <!-- Modal info box -->
+    <div
+      class="modal fade"
+      id="modal-popup-info"
+      data-backdrop="static"
+      data-keyboard="false"
+      tabindex="-1"
+      aria-labelledby="staticBackdropLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="modal-popup-info-label"></h5>
+          </div>
+          <div class="modal-body" id="modal-popup-info-body"></div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-dismiss="modal"
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="main-content" class="jumbotron">
     </div>
 
     <!-- Optional JavaScript; choose one of the two! -->
