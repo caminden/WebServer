@@ -11,6 +11,12 @@ window.onload = () => {
     Routes.routing(path)
 }
 
+window.addEventListener('popstate', e=>{
+    e.preventDefault();
+    const pathname = e.target.location.pathname
+    Routes.routing(pathname)
+})
+
 import * as Auth from "./controller/auth.js"
 import * as Home from './viewpage/home_page.js'
 import * as Profile from './viewpage/profile_page.js'

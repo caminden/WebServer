@@ -1,8 +1,10 @@
 import * as Element from './element.js'
 import * as Auth from '../controller/auth.js'
+import * as Routes from '../controller/routes.js'
 
 export function addEventListeners(){
     Element.menuButtonProfile.addEventListener('click', e=>{
+        history.pushState(null, null, Routes.routePathname.PROFILE)
         e.preventDefault()
         profile_page()
     })
