@@ -39,7 +39,15 @@ function buildProductCard(product) {
       $ ${product.price} <br>
       ${product.summary}
       </p>
-      <a href="#" class="btn btn-primary">Go somewhere</a>
+      <div class="container pt-3 bg-light">
+        <form method="post" class="d-inline">
+            <button class="btn btn-outline-danger" type="submit">&minus;</button>
+        </form>
+        <div class="container rounded text-center text-white bg-primary d-inline-block w-50"> Add </div>
+        <form method="post" class="d-inline">
+            <button class="btn btn-outline-danger" type="submit">&plus;</button>
+        </form>
+      </div>
     </div>
   </div>
   `;
