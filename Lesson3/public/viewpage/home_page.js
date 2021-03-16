@@ -46,6 +46,19 @@ export async function home_page() {
       const p = products[e.target.index.value]
       cart.addItem(p)
       document.getElementById(`qty-${p.docId}`).innerHTML = p.qty
+      Element.shoppingcartCount.innerHTML = cart.getTotalQty()
+    })
+  }
+
+  const minusForms = document.getElementsByClassName("form-decrease-qty")
+  for(let i = 0; i < minusForms.length; i++){
+    minusForms[i].addEventListener("submit", e => {
+      e.preventDefault()
+      const p = products[e.target.index.value]
+      cart.removeItem(p)
+      document.getElementById(`qty-${p.docId}`).innerHTML = 
+          (p.qty == null || p.qty == 0 ? 'Add' : p.qty)
+      Element.shoppingcartCount.innerHTML = cart.getTotalQty()
     })
   }
 }

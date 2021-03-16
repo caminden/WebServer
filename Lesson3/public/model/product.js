@@ -5,6 +5,7 @@ export class Product{
         this.summary = data.summary
         this.imageName = data.imageName
         this.imageURL = data.imageURL
+        this.qty = data.qty
     }
 
     serialize(){
@@ -13,7 +14,8 @@ export class Product{
             price: this.price,
             summar: this.summary,
             imageName: this.imageName,
-            imageURL: this.imageURL
+            imageURL: this.imageURL,
+            qty: this.qty
         }
     }
 }

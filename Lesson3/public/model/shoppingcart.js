@@ -1,4 +1,5 @@
 export class ShoppingCart{
+    
     constructor(uid) {
         this.uid = uid
         this.items //array of serialized product objects
@@ -20,6 +21,7 @@ export class ShoppingCart{
             newItem.docId = product.docId
             this.items.push(newItem)
         }
+        this.saveToLocalStorage()
     }
 
     removeItem(product){
@@ -33,5 +35,22 @@ export class ShoppingCart{
                 this.items.splice(index, 1)
             }
         }
+        this.saveToLocalStorage()
+    }
+
+    saveToLocalStorage(){
+        window.localStorage.setItem(`cart-${this.uid}`, this.stringify())
+    }
+
+    stringify(){
+        return JSON.stringify({uid: this.uid, items: this.items})
+    }
+    
+
+    getTotalQty(){
+        if(!this.items) return 0
+        let n = 0
+        this.items.forEach(item => {n += item.qty})
+        return n
     }
 }

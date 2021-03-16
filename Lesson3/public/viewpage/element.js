@@ -9,3 +9,5 @@ export const popupInfoTitle = document.getElementById('modal-popup-info-label')
 export const popupInfoBody = document.getElementById("modal-popup-info-body")
 
 export const mainContent = document.getElementById("main-content")
+
+export const shoppingcartCount = document.getElementById("shoppingcart-count")
