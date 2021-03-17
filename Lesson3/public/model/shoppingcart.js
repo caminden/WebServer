@@ -61,4 +61,15 @@ export class ShoppingCart{
         this.items.forEach(item => {n += item.qty})
         return n
     }
+
+    getTotalPrice(){
+        if(!this.items){
+            return 0
+        }
+        let total = 0
+        this.items.forEach(item => {
+            total += item.price * item.qty
+        })
+        return total
+    }
 }

@@ -37,7 +37,7 @@ export function addEventListeners(){
         if(user){
             currentUser = user
             Home.getShoppingCartFromLocalStorage()
-            
+
             let elements = document.getElementsByClassName('modal-pre-auth')
             for(let i = 0; i < elements.length; i++){
                 elements[i].style.display = 'none'
@@ -60,6 +60,10 @@ export function addEventListeners(){
             for(let i = 0; i < elements.length; i++){
                 elements[i].style.display = 'none'
             }
+
+            history.pushState(null, null, Routes.routePathname.HOME)
+            const path = window.location.pathname
+            Routes.routing(path)
         }
     })
     

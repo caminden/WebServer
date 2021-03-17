@@ -2,6 +2,7 @@ export const menuButtonSignout = document.getElementById("menu-button-signout")
 export const menuButtonHome = document.getElementById("menu-button-home")
 export const menuButtonProfile = document.getElementById("menu-button-profile")
 export const menuButtonPurchases = document.getElementById("menu-button-purchases")
+export const menuShoppingcart = document.getElementById("menu-button-shoppingcart")
 
 export const formSignin = document.getElementById("form-signin")
 

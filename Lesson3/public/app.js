@@ -21,8 +21,10 @@ import * as Auth from "./controller/auth.js"
 import * as Home from './viewpage/home_page.js'
 import * as Profile from './viewpage/profile_page.js'
 import * as Purchases from './viewpage/purchases_page.js'
+import * as ShoppingCart from './viewpage/shoppingcart_page.js'
 
 Auth.addEventListeners()
 Home.addEventListeners()
 Profile.addEventListeners()
 Purchases.addEventListeners()
+ShoppingCart.addEventListeners()
