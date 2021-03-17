@@ -45,6 +45,14 @@ export class ShoppingCart{
     stringify(){
         return JSON.stringify({uid: this.uid, items: this.items})
     }
+
+    static parse(cartString){
+        if(!cartString) return null
+        const obj = JSON.parse(cartString)
+        const sc = new ShoppingCart(obj.uid)
+        sc.items = obj.items
+        return sc
+    }
     
 
     getTotalQty(){

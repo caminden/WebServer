@@ -14,17 +14,27 @@ export function addEventListeners() {
   });
 }
 
+export let cart
 let products;
 
 export async function home_page() {
   let html = `<h1>Enjoy shopping!</h1>`;
-  let cart
-  if(Auth.currentUser){
-    cart = new ShoppingCart(Auth.currentUser.uid)
-  }
+
+  //if(Auth.currentUser){
+  // cart = new ShoppingCart(Auth.currentUser.uid)
+  //}
 
   try {
     products = await FirebaseController.getProductList();
+    if(cart && cart.items){
+      cart.items.forEach(item => {
+        const product = products.find(p => {
+          return item.docId == p.docId
+        })
+        product.qty = item.qty
+      })
+    }
+    
     let index = 0
     products.forEach((product) => {
       html += buildProductCard(product, index);
@@ -89,4 +99,16 @@ function buildProductCard(product, index) {
     </div>
   </div>
   `;
+}
+
+export function getShoppingCartFromLocalStorage(){
+  const cartString = window.localStorage.getItem(`cart-${Auth.currentUser.uid}`)
+  if(cartString){
+    cart = ShoppingCart.parse(cartString)
+  }
+  else{
+    cart = new ShoppingCart(Auth.currentUser.uid)
+  }
+
+  Element.shoppingcartCount.innerHTML = cart.getTotalQty()
 }
