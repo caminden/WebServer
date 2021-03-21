@@ -12,10 +12,20 @@ export class Product{
         return {
             name: this.name,
             price: this.price,
-            summar: this.summary,
+            summary: this.summary,
             imageName: this.imageName,
             imageURL: this.imageURL,
             qty: this.qty
         }
+    }
+
+    static isSerializedProduct(obj){
+        if(!obj.name || typeof obj.name != 'string') return false
+        if(!obj.price || typeof obj.price != 'number') return false
+        if(!obj.summary || typeof obj.summary != 'string') return false
+        if(!obj.imageName || typeof obj.imageName != 'string') return false
+        if(!obj.imageURL || !obj.imageURL.includes('https')) return false
+        if(!obj.qty || typeof obj.qty != 'number') return false
+        return true
     }
 }

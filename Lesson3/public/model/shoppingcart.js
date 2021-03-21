@@ -1,3 +1,5 @@
+import { Product } from "./product.js"
+
 export class ShoppingCart{
     
     constructor(uid) {
@@ -7,9 +9,7 @@ export class ShoppingCart{
 
     addItem(product){
         if(!this.items) this.items = []
-
         const item = this.items.find(element => {return product.docId == element.docId})
-        
         if(item){
             ++product.qty
             ++item.qty
@@ -47,11 +47,23 @@ export class ShoppingCart{
     }
 
     static parse(cartString){
-        if(!cartString) return null
-        const obj = JSON.parse(cartString)
-        const sc = new ShoppingCart(obj.uid)
-        sc.items = obj.items
-        return sc
+        try{
+            const obj = JSON.parse(cartString)
+            const sc = new ShoppingCart(obj.uid)
+            sc.items = obj.items
+            return sc
+        }catch(e){
+            return null
+        }
+    }
+
+    isValid(){
+        if(!this.uid || typeof this.uid != 'string') return false
+        if(!this.items || !Array.isArray(this.items)) return false
+        for(let i = 0; i < this.items.length; i++){
+            if(!Product.isSerializedProduct(this.items[i])) return false
+        }
+        return true
     }
     
 
@@ -71,5 +83,20 @@ export class ShoppingCart{
             total += item.price * item.qty
         })
         return total
+    }
+
+    serialize(timestamp){
+        return {uid: this.uid, items: this.items, timestamp}
+    }
+    
+    static deserialize(data){
+        const sc = new ShoppingCart(data.uid)
+        sc.items = data.items
+        sc.timestamp = data.timestamp
+        return sc
+    }
+
+    empty(){
+        this.items = null
     }
 }

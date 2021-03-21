@@ -66,5 +66,11 @@ export function addEventListeners(){
             Routes.routing(path)
         }
     })
+
+    Element.buttonSignup.addEventListener("click", () =>{
+        //show sign up modal
+        $('#modal-form-signin').modal('hide')
+        $('#modal-form-signup').modal('show')
+    })
     
 }

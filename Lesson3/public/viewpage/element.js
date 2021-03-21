@@ -5,6 +5,8 @@ export const menuButtonPurchases = document.getElementById("menu-button-purchase
 export const menuShoppingcart = document.getElementById("menu-button-shoppingcart")
 
 export const formSignin = document.getElementById("form-signin")
+export const buttonSignup = document.getElementById("button-signup")
+export const formSignup = document.getElementById("form-signup")
 
 export const popupInfoTitle = document.getElementById('modal-popup-info-label')
 export const popupInfoBody = document.getElementById("modal-popup-info-body")
@@ -12,3 +14,5 @@ export const popupInfoBody = document.getElementById("modal-popup-info-body")
 export const mainContent = document.getElementById("main-content")
 
 export const shoppingcartCount = document.getElementById("shoppingcart-count")
+export const modalTransactionTitle = document.getElementById("modal-transaction-title");
+export const modalTransactionBody = document.getElementById("modal-transaction-body");

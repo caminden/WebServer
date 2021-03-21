@@ -7,10 +7,12 @@ import * as Auth from '../controller/auth.js'
 import { ShoppingCart } from "../model/shoppingcart.js";
 
 export function addEventListeners() {
-  Element.menuButtonHome.addEventListener("click", (e) => {
+  Element.menuButtonHome.addEventListener("click", async (e) => {
     history.pushState(null, null, Routes.routePathname.HOME);
     e.preventDefault();
-    home_page();
+    const label = Util.disableButton(Element.menuButtonHome)
+    await home_page();
+    Util.enableButton(Element.menuButtonHome, label)
   });
 }
 
@@ -80,7 +82,7 @@ function buildProductCard(product, index) {
     <div class="card-body">
       <h5 class="card-title">${product.name}</h5>
       <p class="card-text">
-      $ ${product.price} <br>
+      ${Util.currency(product.price)} <br>
       ${product.summary}
       </p>
       <div class="container pt-3 bg-light ${Auth.currentUser ? 'd-block' : 'd-none'}">
@@ -102,13 +104,13 @@ function buildProductCard(product, index) {
 }
 
 export function getShoppingCartFromLocalStorage(){
-  const cartString = window.localStorage.getItem(`cart-${Auth.currentUser.uid}`)
-  if(cartString){
+  let cartString = window.localStorage.getItem(`cart-${Auth.currentUser.uid}`)
+  //cartString = '{"key": 50}'
     cart = ShoppingCart.parse(cartString)
-  }
-  else{
-    cart = new ShoppingCart(Auth.currentUser.uid)
-  }
+    if(!cart || !cart.isValid() || Auth.currentUser.uid != cart.uid){
+      window.localStorage.removeItem(`cart-${Auth.currentUser.uid}`)
+      cart = new ShoppingCart(Auth.currentUser.uid)
+    }
 
   Element.shoppingcartCount.innerHTML = cart.getTotalQty()
 }
