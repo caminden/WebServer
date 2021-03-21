@@ -70,7 +70,32 @@ export function addEventListeners(){
     Element.buttonSignup.addEventListener("click", () =>{
         //show sign up modal
         $('#modal-form-signin').modal('hide')
+        Element.formSignup.reset()
         $('#modal-form-signup').modal('show')
     })
     
+    Element.formSignup.addEventListener('submit', e =>{
+        e.preventDefault()
+        sign_up(e.target)
+    })
+}
+
+async function sign_up(form){
+    const email = form.email.value
+    const password = form.password.value
+    const passwordConfirm = form.passwordConfirm.value
+
+    Element.formSignupPasswordError.innerHTML = ""
+    if(password != passwordConfirm){
+        Element.formSignupPasswordError.innerHTML = "Two passwords do not match"
+        return
+    }
+
+    try{
+        await FirebaseController.createUser(email, password)
+        Util.popupInfo("Account Created", "You are now signed in", 'modal-form-signup')
+    }catch(e){
+        if(Constant.DEV) console.log(e)
+        Util.popupInfo("Create User Error", JSON.stringify(e), 'modal-form-signup')
+    }
 }

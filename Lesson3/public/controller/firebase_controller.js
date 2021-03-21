@@ -10,6 +10,10 @@ export async function signOut(){
     await firebase.auth().signOut()
 }
 
+export async function createUser(email, password){
+    await firebase.auth().createUserWithEmailAndPassword(email, password)
+}
+
 export async function getProductList(){
     let products = []
     const snapShot = await firebase.firestore().collection(Constant.collectionName.PRODUCTS)

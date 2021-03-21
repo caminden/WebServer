@@ -7,6 +7,7 @@ export const menuShoppingcart = document.getElementById("menu-button-shoppingcar
 export const formSignin = document.getElementById("form-signin")
 export const buttonSignup = document.getElementById("button-signup")
 export const formSignup = document.getElementById("form-signup")
+export const formSignupPasswordError = document.getElementById("form-signup-password-error")
 
 export const popupInfoTitle = document.getElementById('modal-popup-info-label')
 export const popupInfoBody = document.getElementById("modal-popup-info-body")
