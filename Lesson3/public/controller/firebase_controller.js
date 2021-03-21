@@ -1,6 +1,7 @@
 import {Product} from '../model/product.js'
 import * as Constant from '../model/constant.js'
 import { ShoppingCart } from '../model/shoppingcart.js'
+import { AccountInfo } from '../model/account_info.js'
 
 export async function signIn(email, password){
     await firebase.auth().signInWithEmailAndPassword(email, password)
@@ -43,4 +44,18 @@ export async function getPurchaseHistory(uid){
         carts.push(sc)
     })
     return carts
+}
+
+export async function getAccountInfo(uid){
+    const doc = await firebase.firestore().collection(Constant.collectionName.ACCOUNT_INFO)
+                .doc(uid).get()
+    if(doc.exists){
+        return new AccountInfo(doc.data())
+    }
+    else{
+        const defaultInfo = AccountInfo.instance()
+        await firebase.firestore().collection(Constant.collectionName.ACCOUNT_INFO)
+                    .doc(uid).set(defaultInfo.serialize())
+        return defaultInfo
+    }
 }

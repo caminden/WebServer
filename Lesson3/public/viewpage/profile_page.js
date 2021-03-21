@@ -18,3 +18,7 @@ export function profile_page(){
     }
     Element.mainContent.innerHTML = "<h1>Profile Page</h1>"
 }
+
+export function setProfileIcon(photoURL){
+    Element.menuButtonProfile.innerHTML = `<img src="${photoURL}" class="rounded-circle" height="30px"> `
+}
