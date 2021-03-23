@@ -59,3 +59,8 @@ export async function getAccountInfo(uid){
         return defaultInfo
     }
 }
+
+export async function updateAccountInfo(uid, updateInfo){
+    await firebase.firestore().collection(Constant.collectionName.ACCOUNT_INFO)
+                .doc(uid).update(updateInfo)
+}
