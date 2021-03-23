@@ -6,10 +6,12 @@ import * as Util from './util.js'
 import * as Constant from '../model/constant.js'
 
 export function addEventListeners(){
-    Element.menuButtonProfile.addEventListener('click', e=>{
+    Element.menuButtonProfile.addEventListener('click', async e=>{
         history.pushState(null, null, Routes.routePathname.PROFILE)
         e.preventDefault()
-        profile_page()
+        const label = Util.disableButton(Element.menuButtonProfile)
+        await profile_page()
+        Util.enableButton(Element.menuButtonProfile, label)
     })
 }
 
@@ -112,15 +114,59 @@ export async function profile_page(){
             </tr>
             </table>
         </form>
+        <table>
+            <tr>
+                <td>
+                    <input type="file" id="profile-photo-button" value="upload">
+                </td>
+                <td>
+                    <img id="profile-photo-tag" class="rounded-circle" width="250px" src="${accountInfo.photoURL}">
+                </td>
+                <td>
+                    <button id="profile-photo-update-button" class="btn btn-outline-danger">Update Photo</button>
+                </td>
+            </tr>
+        </table>
     `
 
     Element.mainContent.innerHTML = html
+
+    let photoProfile
+
+    document.getElementById("profile-photo-button").addEventListener("change", e => {
+        photoProfile = e.target.files[0]
+        if(!photoProfile){
+            return
+        }
+        const reader = new FileReader()
+        reader.onload = () => document.getElementById("profile-photo-tag").src = reader.result
+        reader.readAsDataURL(photoProfile)
+    })
+
+    const updatePhotoButton = document.getElementById("profile-photo-update-button")
+    updatePhotoButton.addEventListener('click', async () => {
+        if(!photoProfile) {
+            Util.popupInfo("No photo selected", "Please choose a profile photo")
+        }
+        const label = Util.disableButton(updatePhotoButton)
+        try{
+            const photoURL = await FirebaseController.uploadProfilePhoto(photoProfile, Auth.currentUser.uid)
+            await FirebaseController.updateAccountInfo(Auth.currentUser.uid, {photoURL})
+            setProfileIcon(photoURL)
+            Util.popupInfo("Success", "Profile Photo updated")
+        }catch(e){
+            if(Constant.DEV) console.log(e)
+            Util.popupInfo("Error updating photo", JSON.stringify(e))
+        }
+        Util.enableButton(updatePhotoButton, label)
+    })
 
     const forms = document.getElementsByClassName("form-profile-update")
     for(let i = 0; i < forms.length; i++){
         forms[i].addEventListener('submit', async e => {
             e.preventDefault();
-            const buttonLabel = e.submitter.innerHTML
+            //const buttonLabel = e.submitter.innerHTML     not compatible
+            const buttonLabel = e.target.submitter
             const buttons = e.target.getElementsByTagName('button')
             const inputTag = e.target.getElementsByTagName('input')[0]
             const key = inputTag.name
@@ -157,9 +203,9 @@ export async function profile_page(){
 
 function actionButtons(){
     return `
-        <button type="submit" class="btn btn-outline-primary">Edit</button>
-        <button type="submit" class="btn btn-outline-danger" style="display:none;">Update</button>
-        <button type="submit" class="btn btn-outline-secondary" formnovalidate="true" style="display:none;">Cancel</button>
+        <button onclick="this.form.submitter='Edit'" type="submit" class="btn btn-outline-primary">Edit</button>
+        <button onclick="this.form.submitter='Update'" type="submit" class="btn btn-outline-danger" style="display:none;">Update</button>
+        <button onclick="this.form.submitter='Cancel'" type="submit" class="btn btn-outline-secondary" formnovalidate="true" style="display:none;">Cancel</button>
     `
 }
 
