@@ -73,6 +73,26 @@ export async function uploadProfilePhoto(photoFile, imageName){
     return photoURL
 }   
 
+export async function uploadImage(imageFile, imageName) {
+  if (!imageName) {
+    imageName = Date.now() + imageFile.name;
+  }
+  const ref = firebase
+    .storage()
+    .ref()
+    .child(Constant.storageFolderName.PRODUCT_IMAGES + imageName);
+
+  const taskSnapShot = await ref.put(imageFile);
+  const imageURL = await taskSnapShot.ref.getDownloadURL();
+  return { imageName, imageURL };
+}
+
+const cf_addProduct = firebase.functions().httpsCallable("admin_addProduct");
+export async function addProduct(product) {
+  await cf_addProduct(product.serialize());
+}
+
+
 const cf_isAdmin = firebase.functions().httpsCallable("admin_checkAdmin");
 export async function isAdmin(email){
     const result = await cf_isAdmin(email);

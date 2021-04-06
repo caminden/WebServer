@@ -3,7 +3,7 @@ import { Product } from '../model/product.js';
 import * as Element from '../viewpage/element.js'
 import * as Constant from '../model/constant.js'
 import * as Util from '../viewpage/util.js'
-import * as ProductPage from '../viewpage/product_page.js'
+import * as HomePage from '../viewpage/home_page.js'
 
 let imageFiletoUpload
 
@@ -18,7 +18,7 @@ export function addEventListeners(){
         const button = Element.formAddProduct.getElementsByTagName('button')[0]
         const label = Util.disableButton(button)
         await addNewProduct(e)
-        await ProductPage.product_page();
+        await HomePage.home_page()
         Util.enableButton(button, label)
     })
 

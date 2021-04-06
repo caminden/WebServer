@@ -5,6 +5,7 @@ import * as FirebaseController from "../controller/firebase_controller.js";
 import * as Util from "./util.js";
 import * as Auth from "../controller/auth.js";
 import { ShoppingCart } from "../model/shoppingcart.js";
+import * as Add from "../controller/add_product.js";
 
 export function addEventListeners() {
   Element.menuButtonHome.addEventListener("click", async (e) => {
@@ -26,7 +27,7 @@ export async function home_page() {
   // cart = new ShoppingCart(Auth.currentUser.uid)
   //}
 
-  console.log(Auth.isAdmin)
+  console.log(Auth.isAdmin);
   if (Auth.isAdmin) {
     html += `
     <div>
@@ -81,6 +82,16 @@ export async function home_page() {
         p.qty == null || p.qty == 0 ? "Add" : p.qty;
       Element.shoppingcartCount.innerHTML = cart.getTotalQty();
     });
+  }
+
+  if (Auth.isAdmin) {
+    document
+      .getElementById("button-add-product")
+      .addEventListener("click", (e) => {
+        Element.formAddProduct.reset();
+        Add.resetImageSelection();
+        $("#modal-add-product").modal("show");
+      });
   }
 }
 
