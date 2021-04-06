@@ -26,6 +26,7 @@ export async function home_page() {
   // cart = new ShoppingCart(Auth.currentUser.uid)
   //}
 
+  console.log(Auth.isAdmin)
   if (Auth.isAdmin) {
     html += `
     <div>
