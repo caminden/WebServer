@@ -47,25 +47,47 @@
             </button>
           </li>
           <li class="nav-item">
-            <button id="menu-button-home" class="btn btn-outline-primary">Home</button>
+            <button id="menu-button-home" class="btn btn-outline-primary">
+              Home
+            </button>
           </li>
           <li class="nav-item">
-            <button id="menu-button-purchases" class="btn btn-outline-primary modal-post-auth">
+            <button
+              id="menu-button-purchases"
+              class="btn btn-outline-primary modal-post-auth"
+            >
               Purchases
             </button>
           </li>
           <li class="nav-item">
-            <button id="menu-button-signout" class="btn btn-outline-danger modal-post-auth">
+            <button
+              id="menu-button-users"
+              class="btn btn-outline-primary modal-admin-auth"
+            >
+              Users
+            </button>
+          </li>
+          <li class="nav-item">
+            <button
+              id="menu-button-signout"
+              class="btn btn-outline-danger modal-post-auth"
+            >
               Sign out
             </button>
           </li>
         </ul>
-        <button id="menu-button-shoppingcart" class="modal-post-auth btn btn-outline-success" type="button">
-          <img src="images/cart.png" width="30px">
+        <button
+          id="menu-button-shoppingcart"
+          class="modal-post-auth btn btn-outline-success"
+          type="button"
+        >
+          <img src="images/cart.png" width="30px" />
           (<span id="shoppingcart-count">0</span>)
         </button>
-        <button id="menu-button-profile" class="btn btn-outline-primary modal-post-auth">
-        </button>
+        <button
+          id="menu-button-profile"
+          class="btn btn-outline-primary modal-post-auth"
+        ></button>
       </div>
     </nav>
 
@@ -107,9 +129,67 @@
               </div>
             </form>
             <div>
-              No account yet? 
-              <button id="button-signup" class="btn btn-outline-info">Create New Account</button>
+              No account yet?
+              <button id="button-signup" class="btn btn-outline-info">
+                Create New Account
+              </button>
             </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal Add Product-->
+    <div
+      class="modal fade"
+      id="modal-add-product"
+      data-backdrop="static"
+      data-keyboard="false"
+      tabindex="-1"
+      aria-labelledby="staticBackdropLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="modal-add-product-label">
+              Add Product
+            </h5>
+            <button
+              type="button"
+              class="close"
+              data-dismiss="modal"
+              aria-label="Close"
+            >
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <form id="form-add-product" method="post">
+              <div>
+                <input type="text" name="name" placeholder="product name" />
+                <p id="error-add-name" class="error-add-product"></p>
+              </div>
+              <div>
+                <input type="text" name="price" placeholder="price ($)" />
+                <p id="error-add-price" class="error-add-product"></p>
+              </div>
+              <div>
+                Summary: <br /><textarea name="summary"></textarea>
+                <p id="error-add-summary" class="error-add-product"></p>
+              </div>
+              <div>
+                Image:
+                <img id="form-add-img-tag" style="display: block" />
+                <input id="form-add-img-button" type="file" value="upload" />
+                <p id="error-add-image" class="error-add-product"></p>
+              </div>
+              <div>
+                <button type="submit" class="btn btn-outline-primary">
+                  Add
+                </button>
+              </div>
+            </form>
           </div>
         </div>
       </div>
@@ -145,51 +225,98 @@
     </div>
 
     <!-- Modal Transaction details-->
-<div class="modal fade" id="modal-transaction" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-  <div class="modal-dialog modal-xl modal-dialog-scrollable">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="modal-transaction-title"></h5>
-      </div>
-      <div class="modal-body" id="modal-transaction-body"></div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+    <div
+      class="modal fade"
+      id="modal-transaction"
+      data-backdrop="static"
+      data-keyboard="false"
+      tabindex="-1"
+      aria-labelledby="staticBackdropLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-xl modal-dialog-scrollable">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="modal-transaction-title"></h5>
+          </div>
+          <div class="modal-body" id="modal-transaction-body"></div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-dismiss="modal"
+            >
+              Close
+            </button>
+          </div>
+        </div>
       </div>
     </div>
-  </div>
-</div>
 
-<!-- Modal Sign up-->
-<div class="modal fade" id="modal-form-signup" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="modal-signup-label">Create new account</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <form id="form-signup" method="POST">
-          <div>
-            <input type="email" name="email" placeholder="email address" required>
+    <!-- Modal Sign up-->
+    <div
+      class="modal fade"
+      id="modal-form-signup"
+      data-backdrop="static"
+      data-keyboard="false"
+      tabindex="-1"
+      aria-labelledby="staticBackdropLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="modal-signup-label">
+              Create new account
+            </h5>
+            <button
+              type="button"
+              class="close"
+              data-dismiss="modal"
+              aria-label="Close"
+            >
+              <span aria-hidden="true">&times;</span>
+            </button>
           </div>
-          <div>
-            <input type="password" name="password" placeholder="password" required minlength="6">
+          <div class="modal-body">
+            <form id="form-signup" method="POST">
+              <div>
+                <input
+                  type="email"
+                  name="email"
+                  placeholder="email address"
+                  required
+                />
+              </div>
+              <div>
+                <input
+                  type="password"
+                  name="password"
+                  placeholder="password"
+                  required
+                  minlength="6"
+                />
+              </div>
+              <div>
+                <input
+                  type="password"
+                  name="passwordConfirm"
+                  placeholder="confirm password"
+                  required
+                  minlength="6"
+                />
+                <span id="form-signup-password-error" style="color: red"></span>
+              </div>
+              <button type="submit" class="btn btn-outline-primary">
+                Create Account
+              </button>
+            </form>
           </div>
-          <div>
-            <input type="password" name="passwordConfirm" placeholder="confirm password" required minlength="6">
-            <span id="form-signup-password-error" style="color:red"></span>
-          </div>
-          <button type="submit" class="btn btn-outline-primary">Create Account</button>
-        </form>
+        </div>
       </div>
     </div>
-  </div>
-</div>
 
-    <div id="main-content" class="jumbotron">
-    </div>
+    <div id="main-content" class="jumbotron"></div>
 
     <!-- Optional JavaScript; choose one of the two! -->
     <!-- update the version number as needed -->

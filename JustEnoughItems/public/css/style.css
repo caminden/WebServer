@@ -18,10 +18,27 @@ li{
     display: none;
 }
 
+.modal-admin-auth{
+    display: none;
+}
+
 input{
     display: block;
     margin: 8px 0;
     padding: 8px 2px;
     border-width: 0 0 2px 0;
     width: 100%;
+}
+
+textarea{
+    width: 100%;
+    min-height: 150px;
+}
+
+.error-add-product{
+    color: red;
+}
+
+.error-edit-product{
+    color: red;
 }

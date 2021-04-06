@@ -7,6 +7,7 @@ import * as Home from '../viewpage/home_page.js'
 import * as Profile from '../viewpage/profile_page.js'
 
 export let currentUser
+export let isAdmin = false
 
 export function addEventListeners(){
 
@@ -18,6 +19,8 @@ export function addEventListeners(){
 
         try{
             await FirebaseController.signIn(email, password)
+            isAdmin = await FirebaseController.isAdmin(email);
+            console.log(isAdmin)
             $('#modal-form-signin').modal('hide')
         }catch(e){
             if(Constant.DEV) console.log(e);
@@ -51,6 +54,13 @@ export function addEventListeners(){
                 elements[i].style.display = 'block'
             }
 
+            if(isAdmin){
+                elements = document.getElementsByClassName('modal-admin-auth')
+                for(let i = 0; i < elements.length; i++){
+                    elements[i].style.display = 'block'
+                }
+            }
+
             const path = window.location.pathname
             Routes.routing(path)
             
@@ -63,6 +73,13 @@ export function addEventListeners(){
             elements = document.getElementsByClassName('modal-post-auth')
             for(let i = 0; i < elements.length; i++){
                 elements[i].style.display = 'none'
+            }
+             
+            if (isAdmin) {
+              elements = document.getElementsByClassName("modal-admin-auth");
+              for (let i = 0; i < elements.length; i++) {
+                elements[i].style.display = "none";
+              }
             }
 
             history.pushState(null, null, Routes.routePathname.HOME)

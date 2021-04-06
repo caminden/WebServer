@@ -7,5 +7,8 @@ export const collectionName = {
 }
 
 export const storageFolderName = {
-    PROFILE_PHOTOS: 'profile_photos/'
+    PROFILE_PHOTOS: 'profile_photos/',
+    PRODUCT_IMAGES: 'product_image/'
 }
+
+export const adminEmails = ["admin@test.com", "super@test.com"]
