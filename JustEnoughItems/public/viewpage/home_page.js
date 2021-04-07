@@ -28,7 +28,6 @@ export async function home_page() {
   // cart = new ShoppingCart(Auth.currentUser.uid)
   //}
 
-  console.log(Auth.isAdmin);
   if (Auth.isAdmin) {
     html += `
     <div>
@@ -62,6 +61,7 @@ export async function home_page() {
   Element.mainContent.innerHTML = html;
 
   //event listeners for plus and minus
+  if(!Auth.isAdmin){
   const plusForms = document.getElementsByClassName("form-increase-qty");
   for (let i = 0; i < plusForms.length; i++) {
     plusForms[i].addEventListener("submit", (e) => {
@@ -84,8 +84,11 @@ export async function home_page() {
       Element.shoppingcartCount.innerHTML = cart.getTotalQty();
     });
   }
+  }
 
   if (Auth.isAdmin) {
+    
+    
     document
       .getElementById("button-add-product")
       .addEventListener("click", (e) => {
@@ -117,7 +120,7 @@ function buildProductCard(product, index) {
       ${product.summary}
       </p>
       <div class="container pt-3 bg-light ${
-        Auth.currentUser ? "d-block" : "d-none"
+        Auth.currentUser && !Auth.isAdmin ? "d-block" : "d-none"
       }">
         <form method="post" class="d-inline form-decrease-qty">
             <input type="hidden" name="index" value="${index}">
@@ -132,6 +135,19 @@ function buildProductCard(product, index) {
             <input type="hidden" name="index" value="${index}">
             <button class="btn btn-outline-danger" type="submit">&plus;</button>
         </form>
+      </div>
+      <div class="container ${
+        Auth.currentUser && Auth.isAdmin ? "d-block" : "d-none"
+      }">
+      <form class="form-edit-product float-left" method="post">
+        <input type="hidden" name="docId" value="${product.docId}">
+        <button class="btn btn-outline-primary" type="submit">Edit</button>
+      </form>
+      <form class="form-delete-product float-right" method="post">
+        <input type="hidden" name="docId" value="${product.docId}">
+        <input type="hidden" name="imageName" value="${product.imageName}">
+        <button class="btn btn-outline-danger" type="submit">Delete</button>
+      </form>
       </div>
       <div class="review-buttons">
         <button value="${

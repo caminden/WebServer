@@ -108,7 +108,7 @@ export async function purchases_page() {
             try{
                 const docId = await FirebaseController.addComment(c)
                 c.docId = docId
-                Util.popupInfo("Review Posted", JSON.stringify(e), "modal-review-form");
+                Util.popupInfo("Review Posted", "Thank you for your feedback!", "modal-review-form");
             }catch(e){
                 if(Constant.DEV) console.log(e)
                 Util.popupInfo("Error", JSON.stringify(e), "modal-review-form")

@@ -23,8 +23,29 @@ export async function review_page(productId){
     }
     else{
         comments.forEach(comment => {
-            html += `<h3>${comment.email} : ${comment.content}</h3> <br>`
+            html += `<div class="review-item"> <h3>${comment.email} : ${comment.content}</h3> `;
+            if(Auth.isAdmin || Auth.currentUser.email == comment.email){
+                html += `<button value="${comment.docId}" id="button-delete-review" class="btn btn-outline-danger">Delete</button>`;
+            }
+            html += `</div></br>`
         })
     }
     Element.mainContent.innerHTML = html;
+
+    const reviews = document.getElementsByClassName("review-item")
+    for(let i = 0; i < reviews.length; i++){
+        reviews[i].addEventListener('click', async e =>{
+            console.log(e.target.value)
+            const button = document.getElementById("button-delete-review")
+            const label = Util.disableButton(button);
+            try{
+                await FirebaseController.deleteComment(e.target.value);
+            }catch(e){
+                if (Constant.DEV) console.log(e);
+                Util.popupInfo("deleteComment error", JSON.stringify(e));
+            }
+            Util.enableButton(button, label)
+            review_page(productId);
+        })
+    }
 }
