@@ -1,49 +1,48 @@
-import * as Element from './element.js'
-import * as Auth from '../controller/auth.js'
-import * as Routes from '../controller/routes.js'
-import * as FirebaseController from '../controller/firebase_controller.js'
-import * as Constant from '../model/constant.js'
-import * as Util from './util.js'
+import * as Element from "./element.js";
+import * as Auth from "../controller/auth.js";
+import * as Routes from "../controller/routes.js";
+import * as FirebaseController from "../controller/firebase_controller.js";
+import * as Constant from "../model/constant.js";
+import * as Util from "./util.js";
+import { Comment } from "../model/comment.js";
 
-export function addEventListeners(){
-    Element.menuButtonPurchases.addEventListener('click', e=>{
-        history.pushState(null, null, Routes.routePathname.PURCHASES)
-        e.preventDefault()
-        purchases_page()
-    })
+export function addEventListeners() {
+  Element.menuButtonPurchases.addEventListener("click", (e) => {
+    history.pushState(null, null, Routes.routePathname.PURCHASES);
+    e.preventDefault();
+    purchases_page();
+  });
 }
 
-let carts
+let carts;
 
 export async function purchases_page() {
-    if(!Auth.currentUser){
-        Element.mainContent.innerHTML = "<h1>Protected Page</h1>"
-        return
+  if (!Auth.currentUser) {
+    Element.mainContent.innerHTML = "<h1>Protected Page</h1>";
+    return;
+  }
+
+  try {
+    carts = await FirebaseController.getPurchaseHistory(Auth.currentUser.uid);
+    if (!carts || carts.length == 0) {
+      Element.mainContent.innerHTML = "No Purchase History found";
+      return;
     }
+  } catch (e) {
+    if (Constant.DEV) console.log(e);
+    Util.popupInfo("Load PurchaseHistory error", JSON.stringify(e));
+    return;
+  }
 
+  let html = `<h1>Purchase History</h1>`;
 
-    try{
-        carts = await FirebaseController.getPurchaseHistory(Auth.currentUser.uid)
-        if(!carts || carts.length == 0){
-            Element.mainContent.innerHTML = "No Purchase History found"
-            return
-        }
-
-    }catch(e){
-        if(Constant.DEV) console.log(e)
-        Util.popupInfo("Load PurchaseHistory error", JSON.stringify(e))
-        return
-    }
-
-    let html = `<h1>Purchase History</h1>`
-
-    html += `
+  html += `
     <table class="table table-striped">
     <thead>
     <tbody>
-    `
-    for(let index = 0; index < carts.length; index++){
-        html += `
+    `;
+  for (let index = 0; index < carts.length; index++) {
+    html += `
             <tr><td>
                 <form class="purchase-history" method="post">
                     <input type="hidden" name="index" value="${index}">
@@ -51,26 +50,81 @@ export async function purchases_page() {
                         ${new Date(carts[index].timestamp).toString()}
                 </form>
             </td></tr>
-        `
-    }
-    html += `</tbody> </thead>`
+        `;
+  }
+  html += `</tbody> </thead>`;
 
-    Element.mainContent.innerHTML = html
+  Element.mainContent.innerHTML = html;
 
-    const historyForms = document.getElementsByClassName("purchase-history")
-    for(let i = 0; i < historyForms.length; i++){
-        historyForms[i].addEventListener('submit', e =>{
-            e.preventDefault()
-            const index = e.target.index.value
-            Element.modalTransactionTitle.innerHTML = `Purchases at: ${new Date(carts[index].timestamp).toString()}`
-            Element.modalTransactionBody.innerHTML = buildTransactionDetail(carts[index])
-            $('#modal-transaction').modal('show')
-        })
-    }
+  const historyForms = document.getElementsByClassName("purchase-history");
+  for (let i = 0; i < historyForms.length; i++) {
+    historyForms[i].addEventListener("submit", (e) => {
+      e.preventDefault();
+      const index = e.target.index.value;
+      Element.modalTransactionTitle.innerHTML = `Purchases at: ${new Date(
+        carts[index].timestamp
+      ).toString()}`;
+      Element.modalTransactionBody.innerHTML = buildTransactionDetail(
+        carts[index]
+      );
+      $("#modal-transaction").modal("show");
+
+      const reviewForms = Element.modalTransactionBody.getElementsByClassName(
+        "review-forms"
+      );
+
+      for (let i = 0; i < reviewForms.length; i++) {
+        reviewForms[i].addEventListener("submit", (e) => {
+          e.preventDefault();
+          //console.log(e.target.productId.value);
+          $("#modal-transaction").modal("hide");
+          Element.modalReviewTitle.innerHTML = `<div style="display: inline-block;"><img src="${e.target.imageURL.value}" width="150px">`;
+          Element.modalReviewTitle.innerHTML += `${e.target.name.value}</div>`;
+          Element.modalReviewBody.innerHTML = `<form class="add-new-comment" method="post">
+                <input type="hidden" name="productId" value="${e.target.productId.value}">
+                <textarea name="content" placeholder="Leave a comment"></textarea>
+                <br>
+                <button type="submit" class="btn btn-outline-info">Post Comment</button>
+            </form>`;
+
+          $("#modal-review-form").modal("show");
+
+          const addButtons = Element.modalReviewBody.getElementsByClassName("add-new-comment")[0];
+          addButtons.addEventListener("submit", async (e) => {
+            e.preventDefault();
+            const content = e.target.content.value
+            const productId = e.target.productId.value
+            const uid = Auth.currentUser.uid
+            const email = Auth.currentUser.email
+            const timestamp = Date.now()
+            //console.log(content);
+            //console.log(e.target.productId.value);
+
+
+            const c = new Comment({
+                uid, email, timestamp, content, productId
+            })
+
+            try{
+                const docId = await FirebaseController.addComment(c)
+                c.docId = docId
+                Util.popupInfo("Review Posted", JSON.stringify(e), "modal-review-form");
+            }catch(e){
+                if(Constant.DEV) console.log(e)
+                Util.popupInfo("Error", JSON.stringify(e), "modal-review-form")
+            }
+
+          });
+        });
+      }
+    });
 }
 
-function buildTransactionDetail(cart){
-    let html = `
+    
+}
+
+function buildTransactionDetail(cart) {
+  let html = `
     <table class="table table-striped">
         <thead>
         <tr>
@@ -83,9 +137,9 @@ function buildTransactionDetail(cart){
         </tr>
         </thead>
         <tbody>
-    `
-    cart.items.forEach(item => {
-        html += `
+    `;
+  cart.items.forEach((item) => {
+    html += `
             <tr>
                 <td><img src="${item.imageURL}" width="150px"></td>
                 <td>${item.name}</td>
@@ -93,11 +147,28 @@ function buildTransactionDetail(cart){
                 <td>${item.qty}</td>
                 <td>${Util.currency(item.price * item.qty)}</td>
                 <td>${item.summary}</td>
+                <td>
+                <form class="review-forms" method="post">
+                     <input type="hidden" name="name" value="${item.name}">
+                     <input type="hidden" name="productId" value="${
+                       item.docId
+                     }">
+                    <input type="hidden" name="imageURL" value="${
+                      item.imageURL
+                    }">
+                    <button type="submit" class="btn btn-outline-dark">
+                        Leave Review
+                    </button>
+                    </form>
+                </td>
             </tr>
-        `
-    })
+        `;
+  });
 
-    html += `</tbody></table>`
-    html += `<div style="font-size: 150%">Total: ${Util.currency(cart.getTotalPrice())}</div>`
-    return html;
+  html += `</tbody></table>`;
+  html += `<div style="font-size: 150%">Total: ${Util.currency(
+    cart.getTotalPrice()
+  )}</div>`;
+
+  return html;
 }

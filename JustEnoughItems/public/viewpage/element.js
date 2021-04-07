@@ -19,6 +19,9 @@ export const shoppingcartCount = document.getElementById("shoppingcart-count")
 export const modalTransactionTitle = document.getElementById("modal-transaction-title");
 export const modalTransactionBody = document.getElementById("modal-transaction-body");
 
+export const modalReviewTitle = document.getElementById("modal-review-form-title");
+export const modalReviewBody = document.getElementById("modal-review-form-body");
+
 export const formAddProductError = {
     name: document.getElementById('error-add-name'),
     price: document.getElementById('error-add-price'),
@@ -38,3 +41,5 @@ export const formAddImgButton = document.getElementById('form-add-img-button')
 export const formEditProduct = document.getElementById('form-edit-product')
 export const formEditImageTag = document.getElementById("form-edit-img-tag")
 export const formEditImageFileButton = document.getElementById("form-edit-img-button")
+
+export const buttonReview = document.getElementById("review-button");

@@ -6,6 +6,7 @@ import * as Util from "./util.js";
 import * as Auth from "../controller/auth.js";
 import { ShoppingCart } from "../model/shoppingcart.js";
 import * as Add from "../controller/add_product.js";
+import { review_page } from "./review_page.js";
 
 export function addEventListeners() {
   Element.menuButtonHome.addEventListener("click", async (e) => {
@@ -93,6 +94,16 @@ export async function home_page() {
         $("#modal-add-product").modal("show");
       });
   }
+
+  const reviewButtons = document.getElementsByClassName("review-buttons");
+  for (let i = 0; i < reviewButtons.length; i++) {
+    reviewButtons[i].addEventListener("click", e => {  
+        e.preventDefault();
+        //console.log("review");
+        //console.log(e.target.value);
+        review_page(e.target.value);
+      });
+  }
 }
 
 function buildProductCard(product, index) {
@@ -121,6 +132,11 @@ function buildProductCard(product, index) {
             <input type="hidden" name="index" value="${index}">
             <button class="btn btn-outline-danger" type="submit">&plus;</button>
         </form>
+      </div>
+      <div class="review-buttons">
+        <button value="${
+          product.docId
+        }" class="btn btn-outline-primary" style="margin: 8px 0;padding: 8px 2px;border-width: 2px 2px 2px 2px;width: 100%;" type="click">Reviews</button>
       </div>
     </div>
   </div>

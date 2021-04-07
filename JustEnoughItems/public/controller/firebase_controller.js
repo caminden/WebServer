@@ -2,6 +2,7 @@ import {Product} from '../model/product.js'
 import * as Constant from '../model/constant.js'
 import { ShoppingCart } from '../model/shoppingcart.js'
 import { AccountInfo } from '../model/account_info.js'
+import { Comment } from '../model/comment.js'
 
 export async function signIn(email, password){
     await firebase.auth().signInWithEmailAndPassword(email, password)
@@ -85,6 +86,31 @@ export async function uploadImage(imageFile, imageName) {
   const taskSnapShot = await ref.put(imageFile);
   const imageURL = await taskSnapShot.ref.getDownloadURL();
   return { imageName, imageURL };
+}
+
+export async function addComment(comment) {
+  const ref = await firebase
+    .firestore()
+    .collection(Constant.collectionName.COMMENT)
+    .add(comment.serialize());
+  return ref.id;
+}
+
+export async function getCommentList(productId) {
+  const snapShot = await firebase
+    .firestore()
+    .collection(Constant.collectionName.COMMENT)
+    .where("productId", "==", productId)
+    .orderBy("timestamp")
+    .get();
+
+  const comments = [];
+  snapShot.forEach((doc) => {
+    const c = new Comment(doc.data());
+    c.docId = doc.id;
+    comments.push(c);
+  });
+  return comments;
 }
 
 const cf_addProduct = firebase.functions().httpsCallable("admin_addProduct");
