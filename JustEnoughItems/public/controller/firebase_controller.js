@@ -139,6 +139,11 @@ export async function deleteComment(commentId) {
     .delete();
 }
 
+const cf_deleteComment = firebase.functions().httpsCallable("admin_deleteComment")
+export async function adminDeleteComment(commentId){
+    await cf_deleteComment(commentId);
+}
+
 const cf_addProduct = firebase.functions().httpsCallable("admin_addProduct");
 export async function addProduct(product) {
   await cf_addProduct(product.serialize());

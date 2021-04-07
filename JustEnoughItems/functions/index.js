@@ -12,8 +12,7 @@ const admin = require("firebase-admin");
 const serviceAccount = require("./account_key.json");
 
 admin.initializeApp({
-    credential: admin.credential.cert(serviceAccount),
-    
+  credential: admin.credential.cert(serviceAccount),
 });
 
 const Constant = require("./constant.js");
@@ -26,16 +25,17 @@ exports.admin_getUserList = functions.https.onCall(getUserList);
 exports.admin_updateUser = functions.https.onCall(updateUser);
 exports.admin_deleteUser = functions.https.onCall(deleteUser);
 exports.admin_checkAdmin = functions.https.onCall(cfCheckAdmin);
+exports.admin_deleteComment = functions.https.onCall(deleteComment);
 
-function isAdmin(email){
-    return Constant.adminEmails.includes(email);
+function isAdmin(email) {
+  return Constant.adminEmails.includes(email);
 }
 
-async function cfCheckAdmin(email){
-    return Constant.adminEmails.includes(email);
+async function cfCheckAdmin(email) {
+  return Constant.adminEmails.includes(email);
 }
 
-async function addProduct(data, context){
+async function addProduct(data, context) {
   if (!isAdmin(context.auth.token.email)) {
     if (Constant.DEV) console.log("not admit: ", context.auth.token.email);
     throw new functions.https.HttpsError(
@@ -143,7 +143,7 @@ async function updateUser(data, context) {
   }
 }
 
-async function deleteUser(uid, context){
+async function deleteUser(uid, context) {
   if (!isAdmin(context.auth.token.email)) {
     if (Constant.DEV) console.log("not admit: ", context.auth.token.email);
     throw new functions.https.HttpsError(
@@ -151,10 +151,10 @@ async function deleteUser(uid, context){
       "You do not have these priviledges"
     );
   }
-  
-  try{
-    await admin.auth().deleteUser(uid)
-  }catch(e){
+
+  try {
+    await admin.auth().deleteUser(uid);
+  } catch (e) {
     if (Constant.DEV) console.log(e);
     throw new functions.https.HttpsError("internal", "deleteUser failed");
   }
@@ -187,4 +187,22 @@ async function getProductById(docId, context) {
   }
 }
 
+async function deleteComment(commentId, context) {
+  if (!isAdmin(context.auth.token.email)) {
+    if (Constant.DEV) console.log("not admit: ", context.auth.token.email);
+    throw new functions.https.HttpsError(
+      "unauthenticated",
+      "You do not have these priviledges"
+    );
+  }
 
+  try {
+    await admin
+      .firestore()
+      .collection(Constant.collectionName.COMMENTS)
+      .doc(commentId).delete();
+  } catch (e) {
+    if (Constant.DEV) console.log(e);
+    throw new functions.https.HttpsError("internal", "getProductById failed");
+  }
+}

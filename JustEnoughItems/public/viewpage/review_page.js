@@ -42,7 +42,11 @@ export async function review_page(productId) {
       const button = document.getElementById("button-delete-review");
       const label = Util.disableButton(button);
       try {
-        await FirebaseController.deleteComment(e.target.value);
+        if(Auth.isAdmin){
+            await FirebaseController.adminDeleteComment(e.target.value);
+        }else{
+            await FirebaseController.deleteComment(e.target.value); 
+        }
       } catch (e) {
         if (Constant.DEV) console.log(e);
         Util.popupInfo("deleteComment error", JSON.stringify(e));

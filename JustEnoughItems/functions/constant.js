@@ -3,6 +3,7 @@
 /* eslint-disable linebreak-style */
 exports.collectionName = {
   PRODUCTS: "products",
+  COMMENTS: "comments"
 };
 
 exports.DEV = true
