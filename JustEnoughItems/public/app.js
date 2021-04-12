@@ -8,13 +8,15 @@ if(window.location.host.includes("localhost") ||
 
 window.onload = () => {
     const path = window.location.pathname
-    Routes.routing(path)
+    const href = window.location.href
+    Routes.routing(path, href)
 }
 
 window.addEventListener('popstate', e=>{
     e.preventDefault();
     const pathname = e.target.location.pathname
-    Routes.routing(pathname)
+    const href = e.target.location.href
+    Routes.routing(pathname, href)
 })
 
 import * as Auth from "./controller/auth.js"
@@ -34,3 +36,4 @@ ShoppingCart.addEventListeners()
 Add.addEventListeners()
 //Edit.addEventListeners()
 Users.addEventListeners()
+

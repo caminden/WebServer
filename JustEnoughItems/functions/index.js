@@ -206,3 +206,20 @@ async function deleteComment(commentId, context) {
     throw new functions.https.HttpsError("internal", "getProductById failed");
   }
 }
+
+async function addRules(data, context) {
+  if (!cfCheckAdmin(context.auth.token.email)) {
+    if (Const.DEV) console.log("not admit: ", context.auth.token.email);
+    throw new functions.https.HttpsError(
+      "unauthenticated",
+      "You do not have these priviledges"
+    );
+  }
+
+   try {
+    await admin.firestore().collection(Const.collectionName.RULES).add(data);
+  } catch (e) {
+    if (Const.DEV) console.log(e);
+  }
+}
+

@@ -104,7 +104,9 @@ export async function home_page() {
         e.preventDefault();
         //console.log("review");
         //console.log(e.target.value);
+        history.pushState(null, null, Routes.routePathname.REVIEWS + "#" + e.target.value);
         review_page(e.target.value);
+
       });
   }
 }
