@@ -79,7 +79,7 @@ export async function purchases_page() {
           //console.log(e.target.productId.value);
           $("#modal-transaction").modal("hide");
           Element.modalReviewTitle.innerHTML = `<div style="display: inline-block;"><img src="${e.target.imageURL.value}" width="150px">`;
-          Element.modalReviewTitle.innerHTML += `${e.target.name.value}</div>`;
+          Element.modalReviewTitle.innerHTML += `<div class="center-button">${e.target.name.value}</div></div>`;
           Element.modalReviewBody.innerHTML = `<form class="add-new-comment" method="post">
                 <input type="hidden" name="productId" value="${e.target.productId.value}">
                 <textarea name="content" placeholder="Leave a comment"></textarea>

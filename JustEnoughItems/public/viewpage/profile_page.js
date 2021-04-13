@@ -1,38 +1,37 @@
-import * as Element from './element.js'
-import * as Auth from '../controller/auth.js'
-import * as Routes from '../controller/routes.js'
-import * as FirebaseController from '../controller/firebase_controller.js'
-import * as Util from './util.js'
-import * as Constant from '../model/constant.js'
+import * as Element from "./element.js";
+import * as Auth from "../controller/auth.js";
+import * as Routes from "../controller/routes.js";
+import * as FirebaseController from "../controller/firebase_controller.js";
+import * as Util from "./util.js";
+import * as Constant from "../model/constant.js";
 
-export function addEventListeners(){
-    Element.menuButtonProfile.addEventListener('click', async e=>{
-        history.pushState(null, null, Routes.routePathname.PROFILE)
-        e.preventDefault()
-        const label = Util.disableButton(Element.menuButtonProfile)
-        await profile_page()
-        Util.enableButton(Element.menuButtonProfile, label)
-    })
+export function addEventListeners() {
+  Element.menuButtonProfile.addEventListener("click", async (e) => {
+    history.pushState(null, null, Routes.routePathname.PROFILE);
+    e.preventDefault();
+    const label = Util.disableButton(Element.menuButtonProfile);
+    await profile_page();
+    Util.enableButton(Element.menuButtonProfile, label);
+  });
 }
 
-export async function profile_page(){
+export async function profile_page() {
+  if (!Auth.currentUser) {
+    Element.mainContent.innerHTML = "<h1>Protected Page</h1>";
+    return;
+  }
 
-    if(!Auth.currentUser){
-        Element.mainContent.innerHTML = "<h1>Protected Page</h1>"
-        return
-    }
+  let accountInfo;
+  try {
+    accountInfo = await FirebaseController.getAccountInfo(Auth.currentUser.uid);
+  } catch (e) {
+    if (Constant.DEV) console.log(e);
+    Util.popupInfo("Cannot retrieve account info", JSON.stringify(e));
+  }
 
-    let accountInfo
-    try{
-        accountInfo = await FirebaseController.getAccountInfo(Auth.currentUser.uid)
-    }catch(e){
-        if(Constant.DEV) console.log(e)
-        Util.popupInfo("Cannot retrieve account info", JSON.stringify(e))
-    }
+  let html = `<h1>Profile Page</h1>`;
 
-    let html = `<h1>Profile Page</h1>`
-
-    html += `
+  html += `
         <div class="alert alert-primary">
             Email: ${Auth.currentUser.email} (cannot change email as login name)
         </div>
@@ -41,7 +40,9 @@ export async function profile_page(){
             <tr>
                 <td width="15%">Name:</td>
                 <td width="60%">
-                    <input type="text" name="name" value="${accountInfo.name}" placeholder="firstname lastname" disabled required pattern="^[A-Za-z][A-Za-z|'|-| ]+">
+                    <input type="text" name="name" value="${
+                      accountInfo.name
+                    }" placeholder="firstname lastname" disabled required pattern="^[A-Za-z][A-Za-z|'|-| ]+">
                 </td>
                 <td>
                     ${actionButtons()}
@@ -54,7 +55,9 @@ export async function profile_page(){
             <tr>
                 <td width="15%">Address:</td>
                 <td width="60%">
-                    <input type="text" name="address" value="${accountInfo.address}" placeholder="Address" disabled required minlength="2">
+                    <input type="text" name="address" value="${
+                      accountInfo.address
+                    }" placeholder="Address" disabled required minlength="2">
                 </td>
                 <td>
                     ${actionButtons()}
@@ -67,7 +70,9 @@ export async function profile_page(){
             <tr>
                 <td width="15%">City:</td>
                 <td width="60%">
-                    <input type="text" name="city" value="${accountInfo.city}" placeholder="City" disabled required minlength="2">
+                    <input type="text" name="city" value="${
+                      accountInfo.city
+                    }" placeholder="City" disabled required minlength="2">
                 </td>
                 <td>
                     ${actionButtons()}
@@ -80,7 +85,9 @@ export async function profile_page(){
             <tr>
                 <td width="15%">State:</td>
                 <td width="60%">
-                    <input type="text" name="state" value="${accountInfo.state}" placeholder="State (2 Uppercase Letter Code)" disabled required pattern="[A-Z]+" minlength="2" maxlength="2">
+                    <input type="text" name="state" value="${
+                      accountInfo.state
+                    }" placeholder="State (2 Uppercase Letter Code)" disabled required pattern="[A-Z]+" minlength="2" maxlength="2">
                 </td>
                 <td>
                     ${actionButtons()}
@@ -93,7 +100,9 @@ export async function profile_page(){
             <tr>
                 <td width="15%">Zip:</td>
                 <td width="60%">
-                    <input type="number" name="zip" value="${accountInfo.zip}" placeholder="ZIP (5 Digit Zip)" disabled required min="10000" max="99999">
+                    <input type="number" name="zip" value="${
+                      accountInfo.zip
+                    }" placeholder="ZIP (5 Digit Zip)" disabled required min="10000" max="99999">
                 </td>
                 <td>
                     ${actionButtons()}
@@ -106,7 +115,9 @@ export async function profile_page(){
             <tr>
                 <td width="15%">Credit Card#:</td>
                 <td width="60%">
-                    <input type="text" name="creditCardNo" value="${accountInfo.creditCardNo}" placeholder="16 digit card #" disabled required pattern="[0-9]+" minlength="16" maxlength="16">
+                    <input type="text" name="creditCardNo" value="${
+                      accountInfo.creditCardNo
+                    }" placeholder="16 digit card #" disabled required pattern="[0-9]+" minlength="16" maxlength="16">
                 </td>
                 <td>
                     ${actionButtons()}
@@ -120,104 +131,156 @@ export async function profile_page(){
                     <input type="file" id="profile-photo-button" value="upload">
                 </td>
                 <td>
-                    <img id="profile-photo-tag" class="rounded-circle" width="250px" src="${accountInfo.photoURL}">
+                    <img id="profile-photo-tag" class="rounded-circle" width="250px" src="${
+                      accountInfo.photoURL
+                    }">
                 </td>
                 <td>
                     <button id="profile-photo-update-button" class="btn btn-outline-danger">Update Photo</button>
                 </td>
             </tr>
         </table>
-    `
-    let comments
+    `;
+
+    html += "<br><br><h1>Reviews</h1>"
+  let comments = [];
+  try {
+    comments = await FirebaseController.getUserComments(Auth.currentUser.email);
+  } catch (e) {
+    if (Constant.DEV) console.log(e);
+    Util.popupInfo("Cannot retrieve user comments", JSON.stringify(e));
+  }
+
+  comments.forEach((comment) => {
+    html += `<div class="review-item"><div class="card-header" style=" background-color:#d5eeff; text-size: 14px;"> Posted on ${new Date(
+      comment.timestamp
+    ).toString()}</div><div style="font-size: 24px;">
+         ${comment.content}</div>`;
+    if (Auth.currentUser) {
+      if (Auth.currentUser.email == comment.email) {
+        html += `<button class="btn btn-outline-primary" value="${comment.docId}" id="button-delete-review">Delete</button>`;
+      }
+    }
+    html += `<hr></div><br>`;
+  });
+
+  Element.mainContent.innerHTML = html;
+
+  let photoProfile;
+
+  document
+    .getElementById("profile-photo-button")
+    .addEventListener("change", (e) => {
+      photoProfile = e.target.files[0];
+      if (!photoProfile) {
+        return;
+      }
+      const reader = new FileReader();
+      reader.onload = () =>
+        (document.getElementById("profile-photo-tag").src = reader.result);
+      reader.readAsDataURL(photoProfile);
+    });
+
+  const updatePhotoButton = document.getElementById(
+    "profile-photo-update-button"
+  );
+  updatePhotoButton.addEventListener("click", async () => {
+    if (!photoProfile) {
+      Util.popupInfo("No photo selected", "Please choose a profile photo");
+    }
+    const label = Util.disableButton(updatePhotoButton);
     try {
-      comments = await FirebaseController.getUserComments(Auth.currentUser.email)
+      const photoURL = await FirebaseController.uploadProfilePhoto(
+        photoProfile,
+        Auth.currentUser.uid
+      );
+      await FirebaseController.updateAccountInfo(Auth.currentUser.uid, {
+        photoURL,
+      });
+      setProfileIcon(photoURL);
+      Util.popupInfo("Success", "Profile Photo updated");
     } catch (e) {
       if (Constant.DEV) console.log(e);
-      Util.popupInfo("Cannot retrieve user comments", JSON.stringify(e));
+      Util.popupInfo("Error updating photo", JSON.stringify(e));
     }
+    Util.enableButton(updatePhotoButton, label);
+  });
 
-    html += ""
-
-    Element.mainContent.innerHTML = html
-
-    let photoProfile
-
-    document.getElementById("profile-photo-button").addEventListener("change", e => {
-        photoProfile = e.target.files[0]
-        if(!photoProfile){
-            return
+  const forms = document.getElementsByClassName("form-profile-update");
+  for (let i = 0; i < forms.length; i++) {
+    forms[i].addEventListener("submit", async (e) => {
+      e.preventDefault();
+      //const buttonLabel = e.submitter.innerHTML     not compatible
+      const buttonLabel = e.target.submitter;
+      const buttons = e.target.getElementsByTagName("button");
+      const inputTag = e.target.getElementsByTagName("input")[0];
+      const key = inputTag.name;
+      const value = inputTag.value;
+      if (buttonLabel == "Edit") {
+        //edit button
+        buttons[0].style.display = "none";
+        buttons[1].style.display = "inline-block";
+        buttons[2].style.display = "inline-block";
+        inputTag.disabled = false;
+      } else if (buttonLabel == "Update") {
+        //update button
+        try {
+          const update = {};
+          update[key] = value;
+          await FirebaseController.updateAccountInfo(
+            Auth.currentUser.uid,
+            update
+          );
+          accountInfo[key] = value;
+        } catch (e) {
+          if (Constant.DEV) console.log(e);
+          Util.popupInfo(`Update ${key} error`, JSON.stringify(e));
         }
-        const reader = new FileReader()
-        reader.onload = () => document.getElementById("profile-photo-tag").src = reader.result
-        reader.readAsDataURL(photoProfile)
-    })
+        buttons[0].style.display = "block";
+        buttons[1].style.display = "none";
+        buttons[2].style.display = "none";
+        inputTag.disabled = true;
+      } else {
+        //cancel button
+        buttons[0].style.display = "block";
+        buttons[1].style.display = "none";
+        buttons[2].style.display = "none";
+        inputTag.value = accountInfo[key];
+        inputTag.disabled = true;
+      }
+    });
+  }
 
-    const updatePhotoButton = document.getElementById("profile-photo-update-button")
-    updatePhotoButton.addEventListener('click', async () => {
-        if(!photoProfile) {
-            Util.popupInfo("No photo selected", "Please choose a profile photo")
+  const reviews = document.getElementsByClassName("review-item");
+  for (let i = 0; i < reviews.length; i++) {
+    reviews[i].addEventListener("click", async (e) => {
+      console.log(e.target.value);
+      const button = document.getElementById("button-delete-review");
+      const label = Util.disableButton(button);
+      try {
+        if (Auth.isAdmin) {
+          await FirebaseController.adminDeleteComment(e.target.value);
+        } else {
+          await FirebaseController.deleteComment(e.target.value);
         }
-        const label = Util.disableButton(updatePhotoButton)
-        try{
-            const photoURL = await FirebaseController.uploadProfilePhoto(photoProfile, Auth.currentUser.uid)
-            await FirebaseController.updateAccountInfo(Auth.currentUser.uid, {photoURL})
-            setProfileIcon(photoURL)
-            Util.popupInfo("Success", "Profile Photo updated")
-        }catch(e){
-            if(Constant.DEV) console.log(e)
-            Util.popupInfo("Error updating photo", JSON.stringify(e))
-        }
-        Util.enableButton(updatePhotoButton, label)
-    })
-
-    const forms = document.getElementsByClassName("form-profile-update")
-    for(let i = 0; i < forms.length; i++){
-        forms[i].addEventListener('submit', async e => {
-            e.preventDefault();
-            //const buttonLabel = e.submitter.innerHTML     not compatible
-            const buttonLabel = e.target.submitter
-            const buttons = e.target.getElementsByTagName('button')
-            const inputTag = e.target.getElementsByTagName('input')[0]
-            const key = inputTag.name
-            const value = inputTag.value
-            if(buttonLabel == "Edit"){  //edit button
-                buttons[0].style.display = 'none'
-                buttons[1].style.display = 'inline-block'
-                buttons[2].style.display = 'inline-block'
-                inputTag.disabled = false
-            }else if(buttonLabel == 'Update'){  //update button
-                try{
-                    const update = { }
-                    update[key] = value
-                    await FirebaseController.updateAccountInfo(Auth.currentUser.uid, update)
-                    accountInfo[key] = value
-                }catch(e){
-                    if(Constant.DEV) console.log(e)
-                    Util.popupInfo(`Update ${key} error`, JSON.stringify(e))
-                }
-                buttons[0].style.display = 'block'
-                buttons[1].style.display = 'none'
-                buttons[2].style.display = 'none'
-                inputTag.disabled = true
-            }else{  //cancel button
-                buttons[0].style.display = 'block'
-                buttons[1].style.display = 'none'
-                buttons[2].style.display = 'none'
-                inputTag.value = accountInfo[key]
-                inputTag.disabled = true
-            }
-        })
-    }
+      } catch (e) {
+        if (Constant.DEV) console.log(e);
+        Util.popupInfo("deleteComment error", JSON.stringify(e));
+      }
+      Util.enableButton(button, label);
+      profile_page();
+    });
+  }
 }
 
-function actionButtons(){
-    return `
+function actionButtons() {
+  return `
         <button onclick="this.form.submitter='Edit'" type="submit" class="btn btn-outline-primary">Edit</button>
         <button onclick="this.form.submitter='Update'" type="submit" class="btn btn-outline-danger" style="display:none;">Update</button>
         <button onclick="this.form.submitter='Cancel'" type="submit" class="btn btn-outline-secondary" formnovalidate="true" style="display:none;">Cancel</button>
-    `
+    `;
 }
 
-export function setProfileIcon(photoURL){
-    Element.menuButtonProfile.innerHTML = `<img src="${photoURL}" class="rounded-circle" height="30px"> `
+export function setProfileIcon(photoURL) {
+  Element.menuButtonProfile.innerHTML = `<img src="${photoURL}" class="rounded-circle" height="30px"> `;
 }

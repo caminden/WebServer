@@ -124,11 +124,13 @@ export async function getCommentList(productId) {
     .get();
 
   const comments = [];
-  snapShot.forEach((doc) => {
-    const c = new Comment(doc.data());
-    c.docId = doc.id;
-    comments.push(c);
-  });
+  if (snapShot != null && snapShot.length != 0) {
+    snapShot.forEach((doc) => {
+      const c = new Comment(doc.data());
+      c.docId = doc.id;
+      comments.push(c);
+    });
+  }
   return comments;
 }
 

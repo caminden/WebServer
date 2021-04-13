@@ -69,3 +69,11 @@ h1 {
   align-items: center;
   justify-content: center;
 }
+
+.review-item{
+  min-height: 5em;
+  padding   : 1em 4em;
+  font      : 1em/150% sans-serif;
+  position  : relative;
+  background-color:#d5eeff;
+}
