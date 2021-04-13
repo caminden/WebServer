@@ -22,7 +22,7 @@ export function addEventListeners() {
       $("#modal-form-signin").modal("hide");
     } catch (e) {
       if (Constant.DEV) console.log(e);
-      Util.popupInfo("Sign in errer", JSON.stringify(e), "modal-form-signin");
+      Util.popupInfo("Sign in error", JSON.stringify(e), "modal-form-signin");
     }
   });
 
@@ -62,7 +62,8 @@ export function addEventListeners() {
       }
 
       const path = window.location.pathname;
-      Routes.routing(path);
+      const href = window.location.href;
+      Routes.routing(path, href);
     } else {
       currentUser = null;
       isAdmin = false;
@@ -82,7 +83,8 @@ export function addEventListeners() {
 
       history.pushState(null, null, Routes.routePathname.HOME);
       const path = window.location.pathname;
-      Routes.routing(path);
+      const href = window.location.href;
+      Routes.routing(path, href);
     }
   });
 

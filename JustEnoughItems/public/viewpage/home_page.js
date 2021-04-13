@@ -20,7 +20,7 @@ export function addEventListeners() {
 
 export let cart;
 let products;
-
+let page = 0;
 export async function home_page() {
   let html = `<h1>Enjoy shopping!</h1>`;
 
@@ -46,48 +46,79 @@ export async function home_page() {
         product.qty = item.qty;
       });
     }
-
-    let index = 0;
-    products.forEach((product) => {
-      html += buildProductCard(product, index);
-      ++index;
-    });
   } catch (e) {
     if (Constant.DEV) console.log(e);
     Util.popupInfo("getProuct error", JSON.stringify(e));
     return;
   }
 
+  console.log(page);
+
+  for (let i = page * 3; i < page * 3 + 3; i++) {
+    if (products[i] != null) {
+      html += buildProductCard(products[i], i);
+    }
+  }
+
+  html += `
+  <br>
+  <button id="page-button-left" style="float: left">Prev</button>
+  ${page}
+  <button id="page-button-right" style="float: right">Next</button>`;
+
   Element.mainContent.innerHTML = html;
 
-  //event listeners for plus and minus
-  if(!Auth.isAdmin){
-  const plusForms = document.getElementsByClassName("form-increase-qty");
-  for (let i = 0; i < plusForms.length; i++) {
-    plusForms[i].addEventListener("submit", (e) => {
-      e.preventDefault();
-      const p = products[e.target.index.value];
-      cart.addItem(p);
-      document.getElementById(`qty-${p.docId}`).innerHTML = p.qty;
-      Element.shoppingcartCount.innerHTML = cart.getTotalQty();
+  document
+    .getElementById("page-button-right")
+    .addEventListener("click", async (e) => {
+      if (page * 3 + 3 < products.length) {
+        ++page;
+      }
+      console.log("next" + page);
+      await home_page();
     });
-  }
 
-  const minusForms = document.getElementsByClassName("form-decrease-qty");
-  for (let i = 0; i < minusForms.length; i++) {
-    minusForms[i].addEventListener("submit", (e) => {
-      e.preventDefault();
-      const p = products[e.target.index.value];
-      cart.removeItem(p);
-      document.getElementById(`qty-${p.docId}`).innerHTML =
-        p.qty == null || p.qty == 0 ? "Add" : p.qty;
-      Element.shoppingcartCount.innerHTML = cart.getTotalQty();
+  document
+    .getElementById("page-button-left")
+    .addEventListener("click", async (e) => {
+      if (page > 0) {
+        --page;
+      } else {
+        page = 0;
+      }
+      console.log("prev" + page);
+
+      await home_page();
     });
-  }
+
+  //event listeners for plus and minus
+  if (!Auth.isAdmin) {
+    const plusForms = document.getElementsByClassName("form-increase-qty");
+    for (let i = 0; i < plusForms.length; i++) {
+      plusForms[i].addEventListener("submit", (e) => {
+        e.preventDefault();
+        const p = products[e.target.index.value];
+        cart.addItem(p);
+        document.getElementById(`qty-${p.docId}`).innerHTML = p.qty;
+        Element.shoppingcartCount.innerHTML = cart.getTotalQty();
+      });
+    }
+
+    const minusForms = document.getElementsByClassName("form-decrease-qty");
+    for (let i = 0; i < minusForms.length; i++) {
+      minusForms[i].addEventListener("submit", (e) => {
+        e.preventDefault();
+        const p = products[e.target.index.value];
+        cart.removeItem(p);
+        document.getElementById(`qty-${p.docId}`).innerHTML =
+          p.qty == null || p.qty == 0 ? "Add" : p.qty;
+        Element.shoppingcartCount.innerHTML = cart.getTotalQty();
+      });
+    }
   }
 
   if (Auth.isAdmin) {
-       document
+    document
       .getElementById("button-add-product")
       .addEventListener("click", (e) => {
         Element.formAddProduct.reset();
@@ -98,15 +129,24 @@ export async function home_page() {
 
   const reviewButtons = document.getElementsByClassName("review-buttons");
   for (let i = 0; i < reviewButtons.length; i++) {
-    reviewButtons[i].addEventListener("click", e => {  
-        e.preventDefault();
-        //console.log("review");
-        //console.log(e.target.value);
-        history.pushState(null, null, Routes.routePathname.REVIEWS + "#" + e.target.value);
-        review_page(e.target.value);
-
-      });
+    reviewButtons[i].addEventListener("click", (e) => {
+      e.preventDefault();
+      //console.log("review");
+      //console.log(e.target.value);
+      history.pushState(
+        null,
+        null,
+        Routes.routePathname.REVIEWS + "#" + e.target.value
+      );
+      review_page(e.target.value);
+    });
   }
+}
+
+function loadPage(products) {
+  let html = ``;
+
+  return html;
 }
 
 function buildProductCard(product, index) {
