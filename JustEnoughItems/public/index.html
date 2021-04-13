@@ -69,6 +69,14 @@
           </li>
           <li class="nav-item">
             <button
+              id="menu-button-rules"
+              class="btn btn-outline-primary modal-post-auth"
+            >
+              Rules
+            </button>
+          </li>
+          <li class="nav-item">
+            <button
               id="menu-button-signout"
               class="btn btn-outline-danger modal-post-auth"
             >
@@ -340,6 +348,52 @@
               <button type="submit" class="btn btn-outline-primary">
                 Create Account
               </button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!--Modal-->
+    <!--Create new rules-->
+    <div
+      class="modal fade"
+      id="modal-create-new-rule"
+      data-bs-backdrop="static"
+      data-bs-keyboard="false"
+      tabindex="-1"
+      aria-labelledby="staticBackdropLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="modal-create-new-rule-title">Create New Rule</h5>
+            <button
+              type="button"
+              class="close"
+              data-dismiss="modal"
+              aria-label="Close"
+            >
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <form id="form-create-new-rule" method="POST">
+              <div>
+                <input type="text" name="title" placeholder="Title">
+              </div>
+              <div>
+                <textarea
+                  name="content"
+                  cols="50"
+                  rows="5"
+                  placeholder="Rule Info"
+                ></textarea>
+              </div>
+              <div>
+                <button type="submit" class="btn btn-outline-primary">Create</button>
+              </div>
             </form>
           </div>
         </div>

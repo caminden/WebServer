@@ -1,10 +1,12 @@
 export const DEV = true
+export const IdModelCreateNewRule = "modal-create-new-rule";
 
 export const collectionName = {
     PRODUCTS: 'products',
     PURCHASE_HISTORY: 'purchase_history',
     ACCOUNT_INFO: 'account_info',
-    COMMENT: 'comments'
+    COMMENT: 'comments',
+    RULES: "rules"
 }
 
 export const storageFolderName = {

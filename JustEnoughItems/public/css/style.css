@@ -1,51 +1,71 @@
-.my-banner{
-    width: 100%;
-    font-size: 200%;
-    text-align: center;
-    color: white;
-    background-color: blue;
+.my-banner {
+  width: 100%;
+  font-size: 200%;
+  text-align: center;
+  color: white;
+  background-color: blue;
 }
 
-li{
-    padding-right: 15px;
+li {
+  padding-right: 15px;
 }
 
-.modal-pre-auth{
-    display: block;
+.modal-pre-auth {
+  display: block;
 }
 
-.modal-post-auth{
-    display: none;
+.modal-post-auth {
+  display: none;
 }
 
-.modal-admin-auth{
-    display: none;
+.modal-admin-auth {
+  display: none;
 }
 
-.review-class{
-    margin: 8px 0;
-    padding: 8px 2px;
-    border-width: 2px 2px 2px 2px;
-    width: 100%;
+.review-class {
+  margin: 8px 0;
+  padding: 8px 2px;
+  border-width: 2px 2px 2px 2px;
+  width: 100%;
 }
 
-input{
-    display: block;
-    margin: 8px 0;
-    padding: 8px 2px;
-    border-width: 0 0 2px 0;
-    width: 100%;
+input {
+  display: block;
+  margin: 8px 0;
+  padding: 8px 2px;
+  border-width: 0 0 2px 0;
+  width: 100%;
 }
 
-textarea{
-    width: 100%;
-    min-height: 150px;
+textarea {
+  width: 100%;
+  min-height: 150px;
 }
 
-.error-add-product{
-    color: red;
+.error-add-product {
+  color: red;
 }
 
-.error-edit-product{
-    color: red;
+.error-edit-product {
+  color: red;
+}
+
+h1 {
+  text-align: center;
+}
+
+.card-header {
+  background-color: white;
+  font-size: 25px;
+  font-weight: bold;
+}
+
+.card-body {
+  background-color: whitesmoke;
+}
+
+.center-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }

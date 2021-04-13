@@ -128,6 +128,15 @@ export async function profile_page(){
             </tr>
         </table>
     `
+    let comments
+    try {
+      comments = await FirebaseController.getUserComments(Auth.currentUser.email)
+    } catch (e) {
+      if (Constant.DEV) console.log(e);
+      Util.popupInfo("Cannot retrieve user comments", JSON.stringify(e));
+    }
+
+    html += ""
 
     Element.mainContent.innerHTML = html
 

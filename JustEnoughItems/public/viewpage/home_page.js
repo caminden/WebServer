@@ -87,9 +87,7 @@ export async function home_page() {
   }
 
   if (Auth.isAdmin) {
-    
-    
-    document
+       document
       .getElementById("button-add-product")
       .addEventListener("click", (e) => {
         Element.formAddProduct.reset();

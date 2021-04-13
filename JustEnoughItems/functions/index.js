@@ -26,6 +26,8 @@ exports.admin_updateUser = functions.https.onCall(updateUser);
 exports.admin_deleteUser = functions.https.onCall(deleteUser);
 exports.admin_checkAdmin = functions.https.onCall(cfCheckAdmin);
 exports.admin_deleteComment = functions.https.onCall(deleteComment);
+exports.admin_addRules = functions.https.onCall(addRules);
+exports.admin_deleteRules = functions.https.onCall(deleteRules);
 
 function isAdmin(email) {
   return Constant.adminEmails.includes(email);
@@ -200,26 +202,48 @@ async function deleteComment(commentId, context) {
     await admin
       .firestore()
       .collection(Constant.collectionName.COMMENTS)
-      .doc(commentId).delete();
+      .doc(commentId)
+      .delete();
   } catch (e) {
     if (Constant.DEV) console.log(e);
-    throw new functions.https.HttpsError("internal", "getProductById failed");
+    throw new functions.https.HttpsError("internal", "deleteComment failed");
   }
 }
 
-async function addRules(data, context) {
-  if (!cfCheckAdmin(context.auth.token.email)) {
-    if (Const.DEV) console.log("not admit: ", context.auth.token.email);
+async function deleteRules(ruleId, context) {
+  if (!isAdmin(context.auth.token.email)) {
+    if (Constant.DEV) console.log("not admit: ", context.auth.token.email);
     throw new functions.https.HttpsError(
       "unauthenticated",
       "You do not have these priviledges"
     );
   }
 
-   try {
-    await admin.firestore().collection(Const.collectionName.RULES).add(data);
+  try {
+    await admin
+      .firestore()
+      .collection(Constant.collectionName.RULES)
+      .doc(ruleId)
+      .delete();
   } catch (e) {
-    if (Const.DEV) console.log(e);
+    if (Constant.DEV) console.log(e);
+    throw new functions.https.HttpsError("internal", "deleteRule failed");
   }
 }
 
+async function addRules(data, context) {
+  if (!isAdmin(context.auth.token.email)) {
+    if (Constant.DEV) console.log("not admit: ", context.auth.token.email);
+    throw new functions.https.HttpsError(
+      "unauthenticated",
+      "You do not have these priviledges"
+    );
+  }
+  let docId
+  try {
+    docId = await admin.firestore().collection(Constant.collectionName.RULES).add(data);
+  } catch (e) {
+    if (Constant.DEV) console.log(e);
+  }
+  return docId;
+}

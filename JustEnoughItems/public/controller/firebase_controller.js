@@ -3,6 +3,7 @@ import * as Constant from "../model/constant.js";
 import { ShoppingCart } from "../model/shoppingcart.js";
 import { AccountInfo } from "../model/account_info.js";
 import { Comment } from "../model/comment.js";
+import { Rules } from "../model/rules.js";
 
 export async function signIn(email, password) {
   await firebase.auth().signInWithEmailAndPassword(email, password);
@@ -131,6 +132,22 @@ export async function getCommentList(productId) {
   return comments;
 }
 
+export async function getUserComments(email) {
+  const snapShot = await firebase
+    .firestore()
+    .collection(Constant.collectionName.COMMENT)
+    .where("email", "==", email)
+    .orderBy("timestamp")
+    .get();
+  const comments = [];
+  snapShot.forEach((doc) => {
+    const c = new Comment(doc.data());
+    c.docId = doc.id;
+    comments.push(c);
+  });
+  return comments;
+}
+
 export async function deleteComment(commentId) {
   await firebase
     .firestore()
@@ -139,9 +156,35 @@ export async function deleteComment(commentId) {
     .delete();
 }
 
-const cf_deleteComment = firebase.functions().httpsCallable("admin_deleteComment")
-export async function adminDeleteComment(commentId){
-    await cf_deleteComment(commentId);
+export async function getRules() {
+  let ruleList = [];
+  const snapShot = await firebase
+    .firestore()
+    .collection(Constant.collectionName.RULES)
+    .get();
+  snapShot.forEach((doc) => {
+    const r = new Rules(doc.data());
+    r.docId = doc.id;
+    ruleList.push(r);
+  });
+  return ruleList;
+}
+
+const cf_addRules = firebase.functions().httpsCallable("admin_addRules");
+export async function addRules(rules) {
+  await cf_addRules(rules.serialize());
+}
+
+const cf_deleteRules = firebase.functions().httpsCallable("admin_deleteRules");
+export async function deleteRules(rulesId) {
+  await cf_deleteRules(rulesId);
+}
+
+const cf_deleteComment = firebase
+  .functions()
+  .httpsCallable("admin_deleteComment");
+export async function adminDeleteComment(commentId) {
+  await cf_deleteComment(commentId);
 }
 
 const cf_addProduct = firebase.functions().httpsCallable("admin_addProduct");
