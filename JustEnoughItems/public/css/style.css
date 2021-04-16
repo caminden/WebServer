@@ -50,6 +50,10 @@ textarea {
   color: red;
 }
 
+.error-add-rule{
+  color: red;
+}
+
 h1 {
   text-align: center;
 }

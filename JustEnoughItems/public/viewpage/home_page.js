@@ -7,6 +7,7 @@ import * as Auth from "../controller/auth.js";
 import { ShoppingCart } from "../model/shoppingcart.js";
 import * as Add from "../controller/add_product.js";
 import { review_page } from "./review_page.js";
+import * as Edit from '../controller/edit_product.js'
 
 export function addEventListeners() {
   Element.menuButtonHome.addEventListener("click", async (e) => {
@@ -52,7 +53,7 @@ export async function home_page() {
     return;
   }
 
-  console.log(page);
+  //console.log(page);
 
   for (let i = page * 3; i < page * 3 + 3; i++) {
     if (products[i] != null) {
@@ -127,6 +128,29 @@ export async function home_page() {
       });
   }
 
+  const editButtons = document.getElementsByClassName("form-edit-product")
+  for(let i = 0; i < editButtons.length; i++){
+    editButtons[i].addEventListener('submit', e => {
+      e.preventDefault();
+      
+      const button = e.target.getElementsByTagName('button')[0]
+      const label = Util.disableButton(button)
+      Edit.editProduct(e.target.docId.value)
+      Util.enableButton(button, label)
+    })
+  }
+
+  const deleteButtons = document.getElementsByClassName("form-delete-product")
+  for(let i = 0; i < deleteButtons.length; i++){
+    deleteButtons[i].addEventListener('submit', async e => {
+      e.preventDefault();
+      const button = e.target.getElementsByTagName('button')[0]
+      const label = Util.disableButton(button)
+      Edit.deleteProduct(e.target.docId.value, e.target.imageName.value)
+      Util.enableButton(button, label)
+    })
+  }
+
   const reviewButtons = document.getElementsByClassName("review-buttons");
   for (let i = 0; i < reviewButtons.length; i++) {
     reviewButtons[i].addEventListener("click", (e) => {
@@ -141,12 +165,6 @@ export async function home_page() {
       review_page(e.target.value);
     });
   }
-}
-
-function loadPage(products) {
-  let html = ``;
-
-  return html;
 }
 
 function buildProductCard(product, index) {

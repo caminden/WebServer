@@ -203,6 +203,65 @@
       </div>
     </div>
 
+     <!-- Modal Edit Product-->
+    <div
+      class="modal fade"
+      id="modal-edit-product"
+      data-backdrop="static"
+      data-keyboard="false"
+      tabindex="-1"
+      aria-labelledby="staticBackdropLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="modal-edit-product-label">
+              Update Product
+            </h5>
+            <button
+              type="button"
+              class="close"
+              data-dismiss="modal"
+              aria-label="Close"
+            >
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <form id="form-edit-product" method="post">
+              <input type="hidden" name="docId" />
+              <input type="hidden" name="imageName" />
+              <div>
+                Name:
+                <input type="text" name="name"/>
+                <p id="error-edit-name" class="error-edit-product"></p>
+              </div>
+              <div>
+                Price:
+                <input type="text" name="price"/>    
+                <p id="error-edit-price" class="error-edit-product"></p>            
+              </div>
+              <div>
+                Summary: <br /><textarea name="summary"></textarea>
+                <p id="error-edit-summary" class="error-edit-product"></p>             
+              </div>
+              <div>
+                Image:
+                <img id="form-edit-img-tag" style="display: block" />
+                <input id="form-edit-img-button" type="file" value="upload" />                
+              </div>
+              <div>
+                <button type="submit" class="btn btn-outline-primary">
+                  Update
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <!-- Modal info box -->
     <div
       class="modal fade"
@@ -381,7 +440,7 @@
           <div class="modal-body">
             <form id="form-create-new-rule" method="POST">
               <div>
-                <input type="text" name="title" placeholder="Title">
+                <input type="text" name="title" placeholder="Title" required pattern="[A-Za-z][A-Za-z1-9|'|-| ]+" minlength="2">
               </div>
               <div>
                 <textarea
@@ -390,6 +449,7 @@
                   rows="5"
                   placeholder="Rule Info"
                 ></textarea>
+                <p id="error-add-content" class="error-add-rule"></p>
               </div>
               <div>
                 <button type="submit" class="btn btn-outline-primary">Create</button>

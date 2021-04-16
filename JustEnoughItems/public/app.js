@@ -27,7 +27,7 @@ import * as ShoppingCart from './viewpage/shoppingcart_page.js'
 import * as Users from './viewpage/user_page.js'
 import * as Add from './controller/add_product.js'
 import * as Rules from './viewpage/rule_page.js'
-//import * as Edit from './controller/edit_product.js'
+import * as Edit from './controller/edit_product.js'
 
 Auth.addEventListeners()
 Home.addEventListeners()
@@ -35,7 +35,7 @@ Profile.addEventListeners()
 Purchases.addEventListeners()
 ShoppingCart.addEventListeners()
 Add.addEventListeners()
-//Edit.addEventListeners()
+Edit.addEventListeners()
 Users.addEventListeners()
 Rules.addEventListeners()
 

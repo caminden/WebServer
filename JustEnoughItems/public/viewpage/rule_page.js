@@ -17,6 +17,7 @@ export function addEventListeners() {
     const button = Element.formCreateRule.getElementsByTagName("button")[0];
     const label = Util.disableButton(button);
 
+
     const title = Element.formCreateRule.title.value;
     const content = Element.formCreateRule.content.value;
 
@@ -24,6 +25,17 @@ export function addEventListeners() {
       title,
       content,
     });
+    Element.formAddRuleError.content.innerHTML = ""
+
+    const errors = rule.validate()
+
+    if(errors){
+      if(errors.content){
+          Element.formAddRuleError.content.innerHTML = errors.content
+      }
+      Util.enableButton(button, label);
+      return
+    }
 
     try {
       await FirebaseController.addRules(rule);

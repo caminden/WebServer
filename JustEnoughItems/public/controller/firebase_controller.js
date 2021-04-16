@@ -172,6 +172,30 @@ export async function getRules() {
   return ruleList;
 }
 
+const cf_getProductById = firebase
+  .functions()
+  .httpsCallable("admin_getProductById");
+export async function getProductById(docId) {
+  const result = await cf_getProductById(docId);
+  if (result.data) {
+    const product = new Product(result.data);
+    product.docId = result.data.docId;
+    return product;
+  } else return null;
+}
+
+const cf_deleteProduct = firebase
+  .functions()
+  .httpsCallable("admin_deleteProduct");
+export async function deleteProduct(docId, imageName) {
+  await cf_deleteProduct(docId);
+  const ref = firebase
+    .storage()
+    .ref()
+    .child(Constant.storageFolderName.PRODUCT_IMAGES + imageName);
+  await ref.delete();
+}
+
 const cf_addRules = firebase.functions().httpsCallable("admin_addRules");
 export async function addRules(rules) {
   await cf_addRules(rules.serialize());

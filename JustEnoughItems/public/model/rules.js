@@ -10,4 +10,13 @@ export class Rules{
             content: this.content,
         }
     }
+
+     validate(){
+        const errors = {}
+        if(!this.content || this.content.length < 5){
+            errors.content = 'Content to short, min 10 chars'
+        }
+        if(Object.keys(errors).length == 0) return null
+        else return errors
+    }
 }

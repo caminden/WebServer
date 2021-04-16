@@ -37,6 +37,10 @@ export const formEditProductError = {
     summary: document.getElementById("error-edit-summary"),
 }
 
+export const formAddRuleError = {
+    content: document.getElementById("error-add-content"),
+}
+
 export const formAddProduct = document.getElementById('form-add-product')
 export const imgTagAddProduct = document.getElementById('form-add-img-tag')
 export const formAddImgButton = document.getElementById('form-add-img-button')
