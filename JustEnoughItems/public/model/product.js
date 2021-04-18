@@ -15,7 +15,7 @@ export class Product{
             summary: this.summary,
             imageName: this.imageName,
             imageURL: this.imageURL,
-            qty: this.qty
+            qty: this.qty,
         }
     }
 

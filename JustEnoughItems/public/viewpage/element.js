@@ -47,5 +47,6 @@ export const formAddImgButton = document.getElementById('form-add-img-button')
 export const formEditProduct = document.getElementById('form-edit-product')
 export const formEditImageTag = document.getElementById("form-edit-img-tag")
 export const formEditImageFileButton = document.getElementById("form-edit-img-button")
+export const formAddProductTag = document.getElementById("form-add-product-tag")
 
 export const buttonReview = document.getElementById("review-button");

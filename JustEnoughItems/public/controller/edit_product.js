@@ -63,6 +63,14 @@ export function addEventListeners(){
 
         Util.enableButton(button, label)
     })
+
+    Element.formAddProductTag.addEventListener("submit", e => {
+        console.log("Added tag")
+    })
+}
+
+export function addTag(docId){
+   $('#modal-tag-form').modal('show')
 }
 
 export async function editProduct(docId){

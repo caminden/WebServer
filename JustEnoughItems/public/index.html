@@ -291,6 +291,35 @@
       </div>
     </div>
 
+  <!-- Modal tag Form-->
+    <div
+      class="modal fade"
+      id="modal-tag-form"
+      data-backdrop="static"
+      data-keyboard="false"
+      tabindex="-1"
+      aria-labelledby="staticBackdropLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-xl modal-dialog-scrollable">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="modal-tag-form-title"></h5>
+          </div>
+          <div class="modal-body" id="modal-tag-form-body">
+            <form id="form-add-product-tag" method="POST">
+              <div>
+                <input type="text" name="tag" placeholder="Tag" required pattern="[A-Za-z][A-Za-z1-9|'|-| ]+" minlength="2">
+              </div>
+              <div>
+                <button type="submit" class="btn btn-outline-primary">Add</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <!-- Modal Transaction details-->
     <div
       class="modal fade"

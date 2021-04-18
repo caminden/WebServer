@@ -126,7 +126,6 @@ export async function home_page() {
         Add.resetImageSelection();
         $("#modal-add-product").modal("show");
       });
-  }
 
   const editButtons = document.getElementsByClassName("form-edit-product")
   for(let i = 0; i < editButtons.length; i++){
@@ -140,6 +139,15 @@ export async function home_page() {
     })
   }
 
+  const tagButtons = document.getElementsByClassName("form-tag-product")
+  for(let i = 0; i < tagButtons.length; i++){
+    tagButtons[i].addEventListener("submit", e => {
+      e.preventDefault();
+      console.log(e.target.docId.value);
+      Edit.addTag(e.target.docId.value);
+    })
+  }
+
   const deleteButtons = document.getElementsByClassName("form-delete-product")
   for(let i = 0; i < deleteButtons.length; i++){
     deleteButtons[i].addEventListener('submit', async e => {
@@ -150,6 +158,7 @@ export async function home_page() {
       Util.enableButton(button, label)
     })
   }
+}
 
   const reviewButtons = document.getElementsByClassName("review-buttons");
   for (let i = 0; i < reviewButtons.length; i++) {
@@ -197,11 +206,15 @@ function buildProductCard(product, index) {
       <div class="container ${
         Auth.currentUser && Auth.isAdmin ? "d-block" : "d-none"
       }">
-      <form class="form-edit-product float-left" method="post">
+      <form class="form-edit-product float-left" style="padding-left: 8px;" method="post">
         <input type="hidden" name="docId" value="${product.docId}">
         <button class="btn btn-outline-primary" type="submit">Edit</button>
       </form>
-      <form class="form-delete-product float-right" method="post">
+      <form class="form-tag-product float-left" style="padding-left: 8px;" method="post">
+        <input type="hidden" name="docId" value="${product.docId}">
+        <button class="btn btn-outline-primary" type="submit">Tag</button>
+      </form>
+      <form class="form-delete-product float-left" style="padding-left: 8px;" method="post">
         <input type="hidden" name="docId" value="${product.docId}">
         <input type="hidden" name="imageName" value="${product.imageName}">
         <button class="btn btn-outline-danger" type="submit">Delete</button>
