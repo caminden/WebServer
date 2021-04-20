@@ -23,6 +23,7 @@ export const modalTransactionBody = document.getElementById("modal-transaction-b
 
 export const modalReviewTitle = document.getElementById("modal-review-form-title");
 export const modalReviewBody = document.getElementById("modal-review-form-body");
+export const modalReviewError = document.getElementById("modal-review-form-error");
 
 export const formAddProductError = {
     name: document.getElementById('error-add-name'),

@@ -22,34 +22,44 @@ export async function review_page(productId) {
     html += "No Reviews for this item yet";
   } else {
     comments.forEach((comment) => {
-      html += 
-      `<div class="review-page-item"> 
-        <div class="card-header"> ${comment.email} says : </div> 
-        <div style="font-size: 24px"> ${comment.content}</div>`;
-        html += `<div style="font-size: 14px; text-align: right;">${new Date(
-        comment.timestamp).toString()}</div>
+      html += `
+      <form class="review-page-item">
+      <table class="table table-sm">
+            <tr>
+              <td width="100%"><h4>${comment.email} posted:</h4>${new Date(comment.timestamp).toString()}</td>
+            </tr>
+            <tr>
+                <td width="60%" height=20px> 
+                <h5>${comment.content}</h5>
+                </td>
+            </tr>
+      </table>
       `;
-      if (Auth.currentUser) {
+      if (Auth.currentUser) { //if null, cannot check currentUser.email
         if (Auth.isAdmin || Auth.currentUser.email == comment.email) {
-          html += `<button value="${comment.docId}" id="button-delete-review" class="btn btn-outline-danger">Delete</button>`;
+          html += `
+          <input type="hidden" name="commentId" value="${comment.docId}">
+          <button type="submit" id="button-delete-review" class="btn btn-outline-danger"> Delete </button>
+        `;
         }
       }
-      html += `<hr></div>`;
+      html += `</form><hr></div>`;
     });
   }
   Element.mainContent.innerHTML = html;
 
   const reviews = document.getElementsByClassName("review-page-item");
   for (let i = 0; i < reviews.length; i++) {
-    reviews[i].addEventListener("click", async (e) => {
-      console.log(e.target.value);
+    reviews[i].addEventListener("submit", async (e) => {
+      e.preventDefault();
+      console.log(e.target.commentId.value);
       const button = document.getElementById("button-delete-review");
       const label = Util.disableButton(button);
       try {
         if (Auth.isAdmin) {
-          await FirebaseController.adminDeleteComment(e.target.value);
+          await FirebaseController.adminDeleteComment(e.target.commentId.value);
         } else {
-          await FirebaseController.deleteComment(e.target.value);
+          await FirebaseController.deleteComment(e.target.commentId.value);
         }
       } catch (e) {
         if (Constant.DEV) console.log(e);

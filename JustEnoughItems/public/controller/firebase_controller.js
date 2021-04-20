@@ -174,7 +174,12 @@ export async function getRules() {
 }
 
 export async function updateComment(commentId, content){
-
+  //console.log(commentId)
+  //console.log(content)
+  //await firebase.firestore().collection(Constant.collectionName.COMMENT).add(content)
+  await firebase.firestore().collection(Constant.collectionName.COMMENT).doc(commentId).update(content)  
+  //console.log("Finish update")
+  return;
 }
 
 const cf_getProductById = firebase

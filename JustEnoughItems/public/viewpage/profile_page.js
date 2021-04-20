@@ -297,9 +297,14 @@ export async function profile_page() {
         input.disabled = false
       }
       else if(buttonLabel == "Update"){
-        console.log("Update")
-        console.log(value)
-        
+        //console.log("Update")
+        const update = {}
+        try{
+          update["content"] = value
+          await FirebaseController.updateComment(e.target.docId.value, update)
+        }catch(e){
+          if(Util.DEV) console.log(e)
+        }
 
         buttons[3].style.display = "none";
         buttons[2].style.display = "none";

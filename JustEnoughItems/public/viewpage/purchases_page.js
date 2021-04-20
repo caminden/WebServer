@@ -92,6 +92,7 @@ export async function purchases_page() {
 
           const addButtons = Element.modalReviewBody.getElementsByClassName("add-new-comment")[0];
           addButtons.addEventListener("submit", async (e) => {
+            Element.modalReviewError.innerHTML = ""
             e.preventDefault();
             const content = e.target.content.value
             const productId = e.target.productId.value
@@ -106,6 +107,11 @@ export async function purchases_page() {
             const c = new Comment({
                 uid, email, timestamp, content, productId, name
             })
+
+            if(!content || content.length < 5){
+              Element.modalReviewError.innerHTML = "Please enter a review"
+              return;
+            }
 
             try{
                 const docId = await FirebaseController.addComment(c)
