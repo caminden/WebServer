@@ -54,18 +54,21 @@ export async function home_page() {
   }
 
   //console.log(page);
-
-  for (let i = page * 3; i < page * 3 + 3; i++) {
+  html += `<table><tr>`
+  for (let i = page * 4; i < page * 4 + 4; i++) {
     if (products[i] != null) {
-      html += buildProductCard(products[i], i);
+      html += `<td width="30%">${buildProductCard(products[i], i)}</td>`
     }
   }
+  html += `</tr></table>`
 
   html += `
   <br>
+  <div class="text-center" style="width:100%">
   <button id="page-button-left" style="float: left">Prev</button>
-  ${page}
-  <button id="page-button-right" style="float: right">Next</button>`;
+  <span style="width:50%">Page: ${page}</span>
+  <button id="page-button-right" style="float: right">Next</button>
+  </div>`;
 
   Element.mainContent.innerHTML = html;
 
@@ -162,23 +165,23 @@ export async function home_page() {
 
   const reviewButtons = document.getElementsByClassName("review-buttons");
   for (let i = 0; i < reviewButtons.length; i++) {
-    reviewButtons[i].addEventListener("click", (e) => {
+    reviewButtons[i].addEventListener("submit", (e) => {
       e.preventDefault();
       //console.log("review");
-      //console.log(e.target.value);
+      //console.log(e.target.docId.value);
       history.pushState(
         null,
         null,
-        Routes.routePathname.REVIEWS + "#" + e.target.value
+        Routes.routePathname.REVIEWS + "#" + e.target.docId.value
       );
-      review_page(e.target.value);
+      review_page(e.target.docId.value);
     });
   }
 }
 
 function buildProductCard(product, index) {
   return `
-  <div class="card" style="width: 18rem; display: inline-block;" >
+  <div class="card" style="width: 25rem; display: inline-block; height: 50%;" >
     <img src="${product.imageURL}" class="card-img-top">
     <div class="card-body">
       <h5 class="card-title">${product.name}</h5>
@@ -195,7 +198,7 @@ function buildProductCard(product, index) {
         </form>
         <div id="qty-${
           product.docId
-        }" class="container rounded text-center text-white bg-primary d-inline-block w-50"> 
+        }" class="container rounded text-center text-white bg-primary d-inline-block" style="width:70%"> 
             ${product.qty == null || product.qty == 0 ? "Add" : product.qty} 
         </div>
         <form method="post" class="d-inline form-increase-qty">
@@ -206,25 +209,24 @@ function buildProductCard(product, index) {
       <div class="container ${
         Auth.currentUser && Auth.isAdmin ? "d-block" : "d-none"
       }">
-      <form class="form-edit-product float-left" style="padding-left: 8px;" method="post">
+      <form class="form-edit-product d-inline-block float-left" method="post">
         <input type="hidden" name="docId" value="${product.docId}">
-        <button class="btn btn-outline-primary" type="submit">Edit</button>
+        <button class="btn btn-outline-success" type="submit">Edit</button>
       </form>
-      <form class="form-tag-product float-left" style="padding-left: 8px;" method="post">
+      <form class="form-tag-product d-inline-block" style="padding-left: 8px; width:58%" method="post">
         <input type="hidden" name="docId" value="${product.docId}">
-        <button class="btn btn-outline-primary" type="submit">Tag</button>
+        <button class="btn btn-outline-primary" type="submit" style="width:100%">Tag</button>
       </form>
-      <form class="form-delete-product float-left" style="padding-left: 8px;" method="post">
+      <form class="form-delete-product d-inline-block float-right" style="padding-left: 8px;" method="post">
         <input type="hidden" name="docId" value="${product.docId}">
         <input type="hidden" name="imageName" value="${product.imageName}">
         <button class="btn btn-outline-danger" type="submit">Delete</button>
       </form>
       </div>
-      <div class="review-buttons">
-        <button value="${
-          product.docId
-        }" class="btn btn-outline-primary" style="margin: 8px 0;padding: 8px 2px;border-width: 2px 2px 2px 2px;width: 100%;" type="click">Reviews</button>
-      </div>
+      <form class="review-buttons">
+        <input value="${product.docId}" name="docId" type="hidden">
+        <button class="btn btn-outline-dark" style="margin: 8px 0;padding: 8px 2px;border-width: 2px 2px 2px 2px;width: 100%;" type="submit">Reviews</button>
+      </form>
     </div>
   </div>
   `;
