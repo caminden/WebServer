@@ -70,9 +70,10 @@ export function shoppingcart_page() {
   Element.mainContent.innerHTML = html;
 
   const checkOutButton = document.getElementById('button-checkout')
-  checkOutButton.addEventListener('click', async () =>{
+  checkOutButton.addEventListener('click', async e =>{
+    e.preventDefault()
+    console.log("Here")
     const label = Util.disableButton(checkOutButton)
-
     try{
       await FirebaseController.checkOut(cart)
       Util.popupInfo("Success", "Checkout complete")

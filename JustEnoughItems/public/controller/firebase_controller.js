@@ -34,6 +34,7 @@ export async function getProductList() {
 
 export async function checkOut(cart) {
   const data = cart.serialize(Date.now());
+  console.log("Serialized")
   await firebase
     .firestore()
     .collection(Constant.collectionName.PURCHASE_HISTORY)
@@ -172,12 +173,17 @@ export async function getRules() {
   return ruleList;
 }
 
+export async function updateComment(commentId, content){
+
+}
+
 const cf_getProductById = firebase
   .functions()
   .httpsCallable("admin_getProductById");
 export async function getProductById(docId) {
   const result = await cf_getProductById(docId);
   if (result.data) {
+    //console.log(result.data)
     const product = new Product(result.data);
     product.docId = result.data.docId;
     return product;
@@ -204,6 +210,16 @@ export async function addRules(rules) {
 const cf_deleteRules = firebase.functions().httpsCallable("admin_deleteRules");
 export async function deleteRules(rulesId) {
   await cf_deleteRules(rulesId);
+}
+
+const cf_updateProduct = firebase
+  .functions()
+  .httpsCallable("admin_updateProduct");
+export async function updateProduct(product) {
+  const docId = product.docId;
+  const data = product.serializeForUpdate();
+  //console.log(data)
+  await cf_updateProduct({ docId, data });
 }
 
 const cf_deleteComment = firebase

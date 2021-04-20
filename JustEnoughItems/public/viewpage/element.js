@@ -41,6 +41,8 @@ export const formAddRuleError = {
     content: document.getElementById("error-add-content"),
 }
 
+export const formAddTagSuccess = document.getElementById("add-tag-success")
+
 export const formAddProduct = document.getElementById('form-add-product')
 export const imgTagAddProduct = document.getElementById('form-add-img-tag')
 export const formAddImgButton = document.getElementById('form-add-img-button')

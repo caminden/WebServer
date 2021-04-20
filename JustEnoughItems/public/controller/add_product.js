@@ -62,6 +62,7 @@ async function addNewProduct(e){
         const {imageName, imageURL} = await FirebaseController.uploadImage(imageFiletoUpload)
         product.imageName = imageName
         product.imageURL = imageURL
+        product.tags = [];
         await FirebaseController.addProduct(product)
 
         Util.popupInfo("Success", `${product.name} added!`, 'modal-add-product')

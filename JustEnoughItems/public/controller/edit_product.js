@@ -5,6 +5,7 @@ import * as Element from '../viewpage/element.js'
 import { Product } from '../model/product.js'
 
 let imageFile2Upload
+let docId
 
 export function addEventListeners(){
     Element.formEditImageFileButton.addEventListener('change', e=> {
@@ -64,12 +65,34 @@ export function addEventListeners(){
         Util.enableButton(button, label)
     })
 
-    Element.formAddProductTag.addEventListener("submit", e => {
-        console.log("Added tag")
+    Element.formAddProductTag.addEventListener("submit", async e => {
+        e.preventDefault();
+        //console.log("Added tag")
+        //console.log(e.target.tag.value);
+        try{
+            const p = await FirebaseController.getProductById(docId)
+            /*if(p.tags.length == 0){
+                console.log("no tags")
+            }
+            else{
+                console.log("tags")
+            }*/
+            p.tags.push(e.target.tag.value)
+            //console.log(p)
+            await FirebaseController.updateProduct(p)
+            Element.formAddTagSuccess.innerHTML = "Tag Added"
+        }
+        catch(e){
+            Element.formAddTagSuccess.innerHTML = "Tag Not Added, Error"
+        }
+
     })
 }
 
-export function addTag(docId){
+export function addTag(id){
+    docId = id
+    Element.formAddTagSuccess.innerHTML = ""
+    //console.log(id)
    $('#modal-tag-form').modal('show')
 }
 

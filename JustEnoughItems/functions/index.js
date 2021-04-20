@@ -178,8 +178,8 @@ async function getProductById(docId, context) {
       .doc(docId)
       .get();
     if (doc.exists) {
-      const { name, summary, price, imageName, imageURL } = doc.data();
-      const p = { name, price, summary, imageName, imageURL };
+      const { name, summary, price, imageName, imageURL, tags } = doc.data();
+      const p = { name, price, summary, imageName, imageURL, tags };
       p.docId = doc.id;
       return p;
     } else return null;

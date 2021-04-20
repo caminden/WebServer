@@ -82,6 +82,7 @@ export async function purchases_page() {
           Element.modalReviewTitle.innerHTML += `<div class="center-button">${e.target.name.value}</div></div>`;
           Element.modalReviewBody.innerHTML = `<form class="add-new-comment" method="post">
                 <input type="hidden" name="productId" value="${e.target.productId.value}">
+                <input type="hidden" name="productName" value="${e.target.name.value}">
                 <textarea name="content" placeholder="Leave a comment"></textarea>
                 <br>
                 <button type="submit" class="btn btn-outline-info">Post Comment</button>
@@ -94,6 +95,7 @@ export async function purchases_page() {
             e.preventDefault();
             const content = e.target.content.value
             const productId = e.target.productId.value
+            const name = e.target.productName.value
             const uid = Auth.currentUser.uid
             const email = Auth.currentUser.email
             const timestamp = Date.now()
@@ -102,7 +104,7 @@ export async function purchases_page() {
 
 
             const c = new Comment({
-                uid, email, timestamp, content, productId
+                uid, email, timestamp, content, productId, name
             })
 
             try{

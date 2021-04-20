@@ -6,6 +6,7 @@ export class Product{
         this.imageName = data.imageName
         this.imageURL = data.imageURL
         this.qty = data.qty
+        this.tags = data.tags
     }
 
     serialize(){
@@ -16,6 +17,7 @@ export class Product{
             imageName: this.imageName,
             imageURL: this.imageURL,
             qty: this.qty,
+            tags: this.tags
         }
     }
 
@@ -55,6 +57,9 @@ export class Product{
         if(this.summary) p.summary = this.summary
         if(this.imageName) p.imageName = this.imageName
         if(this.imageURL) p.imageURL = this.imageURL
+        if(this.tags) p.tags = this.tags
+        //console.log(this.tags)
+        //console.log(p.tags)
         return p
     }
 }

@@ -17,10 +17,10 @@
     />
     <link rel="stylesheet" href="css/style.css" />
 
-    <title>My Store</title>
+    <title>Just Enough Items</title>
   </head>
   <body>
-    <div class="my-banner">My Store Online</div>
+    <div class="my-banner">Just Enough Items</div>
 
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
       <button
@@ -276,6 +276,14 @@
         <div class="modal-content">
           <div class="modal-header">
             <h5 class="modal-title" id="modal-popup-info-label"></h5>
+            <button
+              type="button"
+              class="close"
+              data-dismiss="modal"
+              aria-label="Close"
+            >
+              <span aria-hidden="true">&times;</span>
+            </button>
           </div>
           <div class="modal-body" id="modal-popup-info-body"></div>
           <div class="modal-footer">
@@ -301,7 +309,7 @@
       aria-labelledby="staticBackdropLabel"
       aria-hidden="true"
     >
-      <div class="modal-dialog modal-xl modal-dialog-scrollable">
+     <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
             <h5 class="modal-title" id="modal-tag-form-title"></h5>
@@ -314,7 +322,17 @@
               <div>
                 <button type="submit" class="btn btn-outline-primary">Add</button>
               </div>
+               <p id="add-tag-success" class="modal-tag-form-response"></p>
             </form>
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-dismiss="modal"
+            >
+              Close
+            </button>
           </div>
         </div>
       </div>

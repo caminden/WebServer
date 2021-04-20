@@ -5,6 +5,7 @@ export class Comment{
         this.email = data.email
         this.timestamp = data.timestamp
         this.content = data.content
+        this.name = data.name
     }
 
     serialize(){
@@ -13,7 +14,8 @@ export class Comment{
             uid: this.uid,
             email: this.email,
             timestamp: this.timestamp,
-            content: this.content
+            content: this.content,
+            name: this.name
         }
     }
 }

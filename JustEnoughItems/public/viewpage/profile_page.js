@@ -152,14 +152,30 @@ export async function profile_page() {
   }
 
   comments.forEach((comment) => {
-    html += `<div class="review-item"><div class="card-header" style=" background-color:#d5eeff; text-size: 14px;"> Posted on ${new Date(
-      comment.timestamp
-    ).toString()}</div><div style="font-size: 24px;">
-         ${comment.content}</div>`;
-    if (Auth.currentUser) {
-      if (Auth.currentUser.email == comment.email) {
-        html += `<button class="btn btn-outline-primary" value="${comment.docId}" id="button-delete-review">Delete</button>`;
-      }
+    html += `
+     <form class="review-item" method="post">
+            <table class="table table-sm">
+            <tr>
+                <td width="15%">Posted on: <br>${new Date(comment.timestamp).toString()}</td>
+                <td width="5%">Product: ${comment.name}</td>
+                <td width="60%"> 
+                <span>Review:</span>
+                <input id="comment-content-${comment.docId}" type="text" name="Comment" disabled value="${
+                       comment.content
+                    }">
+                <input type="hidden" name="docId" value="${comment.docId}">
+                </td>
+            </tr>
+            </table>
+        
+    `
+    if (Auth.currentUser.email == comment.email) {
+        html += `
+        <button onclick="this.form.submitter='Delete'" type="submit" class="btn btn-outline-primary">Delete</button>
+        <button onclick="this.form.submitter='Edit'" type="submit" class="btn btn-outline-primary ">Edit</button>
+        <button onclick="this.form.submitter='Update'" type="submit" class="btn btn-outline-danger " style="display:none;">Update</button>
+        <button onclick="this.form.submitter='Cancel'" type="submit" class="btn btn-outline-secondary " formnovalidate="true" style="display:none;">Cancel</button>
+        </form>`;
     }
     html += `<hr></div><br>`;
   });
@@ -253,22 +269,52 @@ export async function profile_page() {
 
   const reviews = document.getElementsByClassName("review-item");
   for (let i = 0; i < reviews.length; i++) {
-    reviews[i].addEventListener("click", async (e) => {
-      console.log(e.target.value);
-      const button = document.getElementById("button-delete-review");
-      const label = Util.disableButton(button);
+    reviews[i].addEventListener("submit", async (e) => {
+      e.preventDefault()
+      const buttonLabel = e.target.submitter;
+      const buttons =  e.target.getElementsByTagName("button")
+      const input = e.target.getElementsByTagName("input")[0]
+      const value = input.value;
+      //console.log(e.target.docId.value);
+      if(buttonLabel == "Delete"){
+      //const button = document.getElementById("button-delete-review");
+      //const label = Util.disableButton(button);
       try {
-        if (Auth.isAdmin) {
-          await FirebaseController.adminDeleteComment(e.target.value);
-        } else {
-          await FirebaseController.deleteComment(e.target.value);
-        }
+          await FirebaseController.deleteComment(e.target.docId.value);
       } catch (e) {
         if (Constant.DEV) console.log(e);
         Util.popupInfo("deleteComment error", JSON.stringify(e));
       }
-      Util.enableButton(button, label);
+      //Util.enableButton(button, label);
       profile_page();
+      }
+      else if(buttonLabel == "Edit"){
+        //console.log("Edit")
+        buttons[0].style.display = "none";
+        buttons[1].style.display = "none";
+        buttons[2].style.display = "inline-block";
+        buttons[3].style.display = "inline-block";
+        input.disabled = false
+      }
+      else if(buttonLabel == "Update"){
+        console.log("Update")
+        console.log(value)
+        
+
+        buttons[3].style.display = "none";
+        buttons[2].style.display = "none";
+        buttons[1].style.display = "inline-block";
+        buttons[0].style.display = "inline-block";
+        input.disabled = true
+      }
+      else{
+        //console.log("Cancel")
+        buttons[3].style.display = "none";
+        buttons[2].style.display = "none";
+        buttons[1].style.display = "inline-block";
+        buttons[0].style.display = "inline-block";
+        input.disabled = true
+      }
     });
   }
 }

@@ -29,13 +29,13 @@ export async function home_page() {
   // cart = new ShoppingCart(Auth.currentUser.uid)
   //}
 
-  if (Auth.isAdmin) {
+ 
     html += `
     <div>
-    <button id="button-add-product" class="btn btn-outline-danger">+ Add Product</button>
+    <button id="button-add-product" class="btn btn-outline-danger" style="display: ${Auth.isAdmin ? "block" : "none"}">+ Add Product</button>
     </div>
    `;
-  }
+  
 
   try {
     products = await FirebaseController.getProductList();
