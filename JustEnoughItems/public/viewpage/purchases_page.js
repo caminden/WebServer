@@ -74,10 +74,23 @@ export async function purchases_page() {
       );
 
       for (let i = 0; i < reviewForms.length; i++) {
-        reviewForms[i].addEventListener("submit", (e) => {
+        reviewForms[i].addEventListener("submit", async (e) => {
           e.preventDefault();
+          //check if they've left a comment already
+          //console.log(Auth.currentUser.uid)
+          const result = await FirebaseController.checkReview(Auth.currentUser.uid, e.target.productId.value)
+          console.log(result)
+          if(result == false){
+            Element.modalReviewBody.innerHTML = "<div class='text-center'>You've already left a review for this product</div>"
+            $("#modal-transaction").modal("hide");
+            $("#modal-review-form").modal("show");
+            return;
+          }
+          
           //console.log(e.target.productId.value);
           $("#modal-transaction").modal("hide");
+
+          
           Element.modalReviewTitle.innerHTML = `<div style="display: inline-block;"><img src="${e.target.imageURL.value}" width="150px">`;
           Element.modalReviewTitle.innerHTML += `<div class="center-button">${e.target.name.value}</div></div>`;
           Element.modalReviewBody.innerHTML = `<form class="add-new-comment" method="post">

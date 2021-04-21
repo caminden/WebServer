@@ -65,9 +65,9 @@ export async function home_page() {
   html += `
   <br>
   <div class="text-center" style="width:100%">
-  <button id="page-button-left" style="float: left">Prev</button>
+  <button class="btn btn-outline-dark" id="page-button-left" style="float: left">Prev</button>
   <span style="width:50%">Page: ${page}</span>
-  <button id="page-button-right" style="float: right">Next</button>
+  <button class="btn btn-outline-dark" id="page-button-right" style="float: right">Next</button>
   </div>`;
 
   Element.mainContent.innerHTML = html;

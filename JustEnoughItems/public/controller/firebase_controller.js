@@ -34,7 +34,7 @@ export async function getProductList() {
 
 export async function checkOut(cart) {
   const data = cart.serialize(Date.now());
-  console.log("Serialized")
+  console.log("Serialized");
   await firebase
     .firestore()
     .collection(Constant.collectionName.PURCHASE_HISTORY)
@@ -173,13 +173,29 @@ export async function getRules() {
   return ruleList;
 }
 
-export async function updateComment(commentId, content){
-  //console.log(commentId)
-  //console.log(content)
-  //await firebase.firestore().collection(Constant.collectionName.COMMENT).add(content)
-  await firebase.firestore().collection(Constant.collectionName.COMMENT).doc(commentId).update(content)  
-  //console.log("Finish update")
+export async function updateComment(commentId, content) {
+  await firebase
+    .firestore()
+    .collection(Constant.collectionName.COMMENT)
+    .doc(commentId)
+    .update(content);
+
   return;
+}
+
+export async function checkReview(uid, docId){
+  const snapShot = await firebase
+    .firestore()
+    .collection(Constant.collectionName.COMMENT)
+    .where("uid", "==", uid)
+    .get();
+  let result = true;
+  snapShot.forEach((doc) => {
+    if(doc.data().productId == docId){
+      result = false;
+    }
+  })
+  return result;
 }
 
 const cf_getProductById = firebase
