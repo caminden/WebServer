@@ -160,7 +160,7 @@ export async function profile_page() {
                 <td width="5%">Product: ${comment.name}</td>
                 <td width="60%"> 
                 <span>Review:</span>
-                <input id="comment-content-${comment.docId}" type="text" name="Comment" disabled value="${
+                <input id="comment-content-${comment.docId}" type="text" name="Comment" disabled required minlength=5 value="${
                        comment.content
                     }">
                 <input type="hidden" name="docId" value="${comment.docId}">
