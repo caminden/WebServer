@@ -15,7 +15,8 @@ export function addEventListeners() {
         Home.home_page();
         return;
     }
-    console.log(keywords);
+    history.pushState(null, null, Routes.routePathname.SEARCH + "#" + keywords)
+    //console.log(keywords);
     searchPage(keywords);
   })
 }
