@@ -84,6 +84,21 @@
             </button>
           </li>
         </ul>
+        <form
+          id="form-search"
+          class="form-inline my-2 my-lg-0 modal-menus-post-auth"
+        >
+          <button class="btn btn-outline-success my-2 my-sm-0" type="submit">
+            Search
+          </button>
+          <input
+            name="searchKeywords"
+            class="form-control mr-sm-2"
+            type="search"
+            placeholder="Search by tag"
+            aria-label="Search"
+          />
+        </form>
         <button
           id="menu-button-shoppingcart"
           class="modal-post-auth btn btn-outline-success"
@@ -203,7 +218,7 @@
       </div>
     </div>
 
-     <!-- Modal Edit Product-->
+    <!-- Modal Edit Product-->
     <div
       class="modal fade"
       id="modal-edit-product"
@@ -234,22 +249,22 @@
               <input type="hidden" name="imageName" />
               <div>
                 Name:
-                <input type="text" name="name"/>
+                <input type="text" name="name" />
                 <p id="error-edit-name" class="error-edit-product"></p>
               </div>
               <div>
                 Price:
-                <input type="text" name="price"/>    
-                <p id="error-edit-price" class="error-edit-product"></p>            
+                <input type="text" name="price" />
+                <p id="error-edit-price" class="error-edit-product"></p>
               </div>
               <div>
                 Summary: <br /><textarea name="summary"></textarea>
-                <p id="error-edit-summary" class="error-edit-product"></p>             
+                <p id="error-edit-summary" class="error-edit-product"></p>
               </div>
               <div>
                 Image:
                 <img id="form-edit-img-tag" style="display: block" />
-                <input id="form-edit-img-button" type="file" value="upload" />                
+                <input id="form-edit-img-button" type="file" value="upload" />
               </div>
               <div>
                 <button type="submit" class="btn btn-outline-primary">
@@ -299,7 +314,7 @@
       </div>
     </div>
 
-  <!-- Modal tag Form-->
+    <!-- Modal tag Form-->
     <div
       class="modal fade"
       id="modal-tag-form"
@@ -309,7 +324,7 @@
       aria-labelledby="staticBackdropLabel"
       aria-hidden="true"
     >
-     <div class="modal-dialog">
+      <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
             <h5 class="modal-title" id="modal-tag-form-title"></h5>
@@ -317,12 +332,21 @@
           <div class="modal-body" id="modal-tag-form-body">
             <form id="form-add-product-tag" method="POST">
               <div>
-                <input type="text" name="tag" placeholder="Tag" required pattern="[A-Za-z][A-Za-z1-9|'|-| ]+" minlength="2">
+                <input
+                  type="text"
+                  name="tag"
+                  placeholder="Tag"
+                  required
+                  pattern="[A-Za-z][A-Za-z1-9|'|-| ]+"
+                  minlength="2"
+                />
               </div>
               <div>
-                <button type="submit" class="btn btn-outline-primary">Add</button>
+                <button type="submit" class="btn btn-outline-primary">
+                  Add
+                </button>
               </div>
-               <p id="add-tag-success" class="modal-tag-form-response"></p>
+              <p id="add-tag-success" class="modal-tag-form-response"></p>
             </form>
           </div>
           <div class="modal-footer">
@@ -382,8 +406,7 @@
           <div class="modal-header">
             <h5 class="modal-title" id="modal-review-form-title"></h5>
           </div>
-          <div class="modal-body" id="modal-review-form-body">
-          </div>
+          <div class="modal-body" id="modal-review-form-body"></div>
           <p id="modal-review-form-error" class="error-add-review"></p>
           <div class="modal-footer">
             <button
@@ -475,7 +498,9 @@
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title" id="modal-create-new-rule-title">Create New Rule</h5>
+            <h5 class="modal-title" id="modal-create-new-rule-title">
+              Create New Rule
+            </h5>
             <button
               type="button"
               class="close"
@@ -488,7 +513,14 @@
           <div class="modal-body">
             <form id="form-create-new-rule" method="POST">
               <div>
-                <input type="text" name="title" placeholder="Title" required pattern="[A-Za-z][A-Za-z1-9|'|-| ]+" minlength="2">
+                <input
+                  type="text"
+                  name="title"
+                  placeholder="Title"
+                  required
+                  pattern="[A-Za-z][A-Za-z1-9|'|-| ]+"
+                  minlength="2"
+                />
               </div>
               <div>
                 <textarea
@@ -500,7 +532,9 @@
                 <p id="error-add-content" class="error-add-rule"></p>
               </div>
               <div>
-                <button type="submit" class="btn btn-outline-primary">Create</button>
+                <button type="submit" class="btn btn-outline-primary">
+                  Create
+                </button>
               </div>
             </form>
           </div>

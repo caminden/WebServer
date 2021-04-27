@@ -183,7 +183,7 @@ export async function updateComment(commentId, content) {
   return;
 }
 
-export async function checkReview(uid, docId){
+export async function checkReview(uid, docId) {
   const snapShot = await firebase
     .firestore()
     .collection(Constant.collectionName.COMMENT)
@@ -191,11 +191,32 @@ export async function checkReview(uid, docId){
     .get();
   let result = true;
   snapShot.forEach((doc) => {
-    if(doc.data().productId == docId){
+    if (doc.data().productId == docId) {
       result = false;
     }
-  })
+  });
   return result;
+}
+
+export async function searchProducts(keywords) {
+  const snapshot = await firebase
+    .firestore()
+    .collection(Constant.collectionName.PRODUCTS)
+    .get();
+  const productList = [];
+  snapshot.forEach((doc) => {
+    if (doc.data().tags.length != 0) {
+      let tags = doc.data().tags;
+      tags.forEach((tag) => {
+        if (keywords.toLowerCase() == tag.toLowerCase()) {
+          const p = new Product(doc.data());
+          p.docId = doc.id;
+          productList.push(p);
+        }
+      });
+    }
+  });
+  return productList;
 }
 
 const cf_getProductById = firebase

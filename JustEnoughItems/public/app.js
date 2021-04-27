@@ -28,6 +28,7 @@ import * as Users from './viewpage/user_page.js'
 import * as Add from './controller/add_product.js'
 import * as Rules from './viewpage/rule_page.js'
 import * as Edit from './controller/edit_product.js'
+import * as Search from './viewpage/search_page.js'
 
 Auth.addEventListeners()
 Home.addEventListeners()
@@ -38,4 +39,6 @@ Add.addEventListeners()
 Edit.addEventListeners()
 Users.addEventListeners()
 Rules.addEventListeners()
+Search.addEventListeners()
+
 

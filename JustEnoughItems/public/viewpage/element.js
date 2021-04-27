@@ -11,6 +11,7 @@ export const buttonSignup = document.getElementById("button-signup")
 export const formSignup = document.getElementById("form-signup")
 export const formSignupPasswordError = document.getElementById("form-signup-password-error")
 export const formCreateRule = document.getElementById("form-create-new-rule")
+export const formSearch = document.getElementById("form-search")
 
 export const popupInfoTitle = document.getElementById('modal-popup-info-label')
 export const popupInfoBody = document.getElementById("modal-popup-info-body")

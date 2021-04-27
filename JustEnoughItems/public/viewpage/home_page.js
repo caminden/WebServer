@@ -7,7 +7,7 @@ import * as Auth from "../controller/auth.js";
 import { ShoppingCart } from "../model/shoppingcart.js";
 import * as Add from "../controller/add_product.js";
 import { review_page } from "./review_page.js";
-import * as Edit from '../controller/edit_product.js'
+import * as Edit from "../controller/edit_product.js";
 
 export function addEventListeners() {
   Element.menuButtonHome.addEventListener("click", async (e) => {
@@ -23,19 +23,19 @@ export let cart;
 let products;
 let page = 0;
 export async function home_page() {
-  let html = `<h1>Enjoy shopping!</h1>`;
+  //let html = `<h1>Enjoy shopping!</h1>`;
 
   //if(Auth.currentUser){
   // cart = new ShoppingCart(Auth.currentUser.uid)
   //}
 
- 
-    html += `
+  /*html += `
     <div>
-    <button id="button-add-product" class="btn btn-outline-danger" style="display: ${Auth.isAdmin ? "block" : "none"}">+ Add Product</button>
+    <button id="button-add-product" class="btn btn-outline-danger" style="display: ${
+      Auth.isAdmin ? "block" : "none"
+    }">+ Add Product</button>
     </div>
-   `;
-  
+   `;*/
 
   try {
     products = await FirebaseController.getProductList();
@@ -53,14 +53,30 @@ export async function home_page() {
     return;
   }
 
+  build_homePage(products);
+}
+
+export async function build_homePage(_products) {
   //console.log(page);
-  html += `<table><tr>`
+  let html = `<h1>Enjoy shopping!</h1>`;
+
+  
+
+  html += `
+    <div>
+    <button id="button-add-product" class="btn btn-outline-danger" style="display: ${
+      Auth.isAdmin ? "block" : "none"
+    }">+ Add Product</button>
+    </div>
+   `;
+
+  html += `<table><tr>`;
   for (let i = page * 4; i < page * 4 + 4; i++) {
-    if (products[i] != null) {
-      html += `<td width="30%">${buildProductCard(products[i], i)}</td>`
+    if (_products[i] != null) {
+      html += `<td width="30%">${buildProductCard(_products[i], i)}</td>`;
     }
   }
-  html += `</tr></table>`
+  html += `</tr></table>`;
 
   html += `
   <br>
@@ -75,11 +91,11 @@ export async function home_page() {
   document
     .getElementById("page-button-right")
     .addEventListener("click", async (e) => {
-      if (page * 3 + 3 < products.length) {
+      if (page * 3 + 3 < _products.length) {
         ++page;
       }
       console.log("next" + page);
-      await home_page();
+      await build_homePage(_products);
     });
 
   document
@@ -92,7 +108,7 @@ export async function home_page() {
       }
       console.log("prev" + page);
 
-      await home_page();
+      await build_homePage(_products);
     });
 
   //event listeners for plus and minus
@@ -101,7 +117,7 @@ export async function home_page() {
     for (let i = 0; i < plusForms.length; i++) {
       plusForms[i].addEventListener("submit", (e) => {
         e.preventDefault();
-        const p = products[e.target.index.value];
+        const p = _products[e.target.index.value];
         cart.addItem(p);
         document.getElementById(`qty-${p.docId}`).innerHTML = p.qty;
         Element.shoppingcartCount.innerHTML = cart.getTotalQty();
@@ -112,7 +128,7 @@ export async function home_page() {
     for (let i = 0; i < minusForms.length; i++) {
       minusForms[i].addEventListener("submit", (e) => {
         e.preventDefault();
-        const p = products[e.target.index.value];
+        const p = _products[e.target.index.value];
         cart.removeItem(p);
         document.getElementById(`qty-${p.docId}`).innerHTML =
           p.qty == null || p.qty == 0 ? "Add" : p.qty;
@@ -130,38 +146,40 @@ export async function home_page() {
         $("#modal-add-product").modal("show");
       });
 
-  const editButtons = document.getElementsByClassName("form-edit-product")
-  for(let i = 0; i < editButtons.length; i++){
-    editButtons[i].addEventListener('submit', e => {
-      e.preventDefault();
-      
-      const button = e.target.getElementsByTagName('button')[0]
-      const label = Util.disableButton(button)
-      Edit.editProduct(e.target.docId.value)
-      Util.enableButton(button, label)
-    })
-  }
+    const editButtons = document.getElementsByClassName("form-edit-product");
+    for (let i = 0; i < editButtons.length; i++) {
+      editButtons[i].addEventListener("submit", (e) => {
+        e.preventDefault();
 
-  const tagButtons = document.getElementsByClassName("form-tag-product")
-  for(let i = 0; i < tagButtons.length; i++){
-    tagButtons[i].addEventListener("submit", e => {
-      e.preventDefault();
-      console.log(e.target.docId.value);
-      Edit.addTag(e.target.docId.value);
-    })
-  }
+        const button = e.target.getElementsByTagName("button")[0];
+        const label = Util.disableButton(button);
+        Edit.editProduct(e.target.docId.value);
+        Util.enableButton(button, label);
+      });
+    }
 
-  const deleteButtons = document.getElementsByClassName("form-delete-product")
-  for(let i = 0; i < deleteButtons.length; i++){
-    deleteButtons[i].addEventListener('submit', async e => {
-      e.preventDefault();
-      const button = e.target.getElementsByTagName('button')[0]
-      const label = Util.disableButton(button)
-      Edit.deleteProduct(e.target.docId.value, e.target.imageName.value)
-      Util.enableButton(button, label)
-    })
+    const tagButtons = document.getElementsByClassName("form-tag-product");
+    for (let i = 0; i < tagButtons.length; i++) {
+      tagButtons[i].addEventListener("submit", (e) => {
+        e.preventDefault();
+        console.log(e.target.docId.value);
+        Edit.addTag(e.target.docId.value);
+      });
+    }
+
+    const deleteButtons = document.getElementsByClassName(
+      "form-delete-product"
+    );
+    for (let i = 0; i < deleteButtons.length; i++) {
+      deleteButtons[i].addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const button = e.target.getElementsByTagName("button")[0];
+        const label = Util.disableButton(button);
+        Edit.deleteProduct(e.target.docId.value, e.target.imageName.value);
+        Util.enableButton(button, label);
+      });
+    }
   }
-}
 
   const reviewButtons = document.getElementsByClassName("review-buttons");
   for (let i = 0; i < reviewButtons.length; i++) {

@@ -5,7 +5,7 @@ export class Product{
         this.summary = data.summary
         this.imageName = data.imageName
         this.imageURL = data.imageURL
-        this.qty = data.qty
+        this.qty = data.qty != null ? data.qty : 0
         this.tags = data.tags
     }
 
