@@ -21,18 +21,33 @@ export async function profile_page() {
     return;
   }
 
-  let accountInfo;
+  /*let accountInfo;
   try {
     accountInfo = await FirebaseController.getAccountInfo(Auth.currentUser.uid);
   } catch (e) {
     if (Constant.DEV) console.log(e);
     Util.popupInfo("Cannot retrieve account info", JSON.stringify(e));
-  }
+  }*/
 
+  profilePage(Auth.currentUser.uid, Auth.currentUser.email);
+}
+
+export async function profilePage(uid, email) {
+  let accountInfo
+
+  try {
+    accountInfo = await FirebaseController.getAccountInfo(uid);
+  } catch (e) {
+    if (Constant.DEV) console.log(e);
+    Util.popupInfo("Cannot retrieve account info", JSON.stringify(e));
+  }
+    
   let html = `<h1>Profile Page</h1>`;
 
   html += `
-        <div class="alert alert-primary">
+        <div class="alert alert-primary ${
+          email == Auth.currentUser.email ? "d-block" : "d-none"
+        }">
             Email: ${Auth.currentUser.email} (cannot change email as login name)
         </div>
         <form id="profile-name" class="form-profile-update" method="post">
@@ -45,12 +60,16 @@ export async function profile_page() {
                     }" placeholder="firstname lastname" disabled required pattern="^[A-Za-z][A-Za-z|'|-| ]+">
                 </td>
                 <td>
-                    ${actionButtons()}
+                    <div class="${
+                      email == Auth.currentUser.email ? "d-block" : "d-none"
+                    }">${actionButtons()}</div>
                 </td>
             </tr>
             </table>
         </form>
-        <form id="profile-address" class="form-profile-update" method="post">
+        <form id="profile-address" class="form-profile-update ${
+          email == Auth.currentUser.email ? "d-block" : "d-none"
+        }" method="post">
             <table class="table table-sm">
             <tr>
                 <td width="15%">Address:</td>
@@ -60,7 +79,9 @@ export async function profile_page() {
                     }" placeholder="Address" disabled required minlength="2">
                 </td>
                 <td>
-                    ${actionButtons()}
+                   <div class="${
+                     email == Auth.currentUser.email ? "d-block" : "d-none"
+                   }">${actionButtons()}</div>
                 </td>
             </tr>
             </table>
@@ -75,7 +96,9 @@ export async function profile_page() {
                     }" placeholder="City" disabled required minlength="2">
                 </td>
                 <td>
-                    ${actionButtons()}
+                   <div class="${
+                     email == Auth.currentUser.email ? "d-block" : "d-none"
+                   }">${actionButtons()}</div>
                 </td>
             </tr>
             </table>
@@ -90,12 +113,16 @@ export async function profile_page() {
                     }" placeholder="State (2 Uppercase Letter Code)" disabled required pattern="[A-Z]+" minlength="2" maxlength="2">
                 </td>
                 <td>
-                    ${actionButtons()}
+                    <div class="${
+                      email == Auth.currentUser.email ? "d-block" : "d-none"
+                    }">${actionButtons()}</div>
                 </td>
             </tr>
             </table>
         </form>
-        <form id="profile-zip" class="form-profile-update" method="post">
+        <form id="profile-zip" class="form-profile-update ${
+          email == Auth.currentUser.email ? "d-block" : "d-none"
+        }" method="post">
             <table class="table table-sm">
             <tr>
                 <td width="15%">Zip:</td>
@@ -105,12 +132,16 @@ export async function profile_page() {
                     }" placeholder="ZIP (5 Digit Zip)" disabled required min="10000" max="99999">
                 </td>
                 <td>
-                    ${actionButtons()}
+                   <div class="${
+                     email == Auth.currentUser.email ? "d-block" : "d-none"
+                   }">${actionButtons()}</div>
                 </td>
             </tr>
             </table>
         </form>
-        <form id="profile-creditCardNo" class="form-profile-update" method="post">
+        <form id="profile-creditCardNo" class="form-profile-update ${
+          email == Auth.currentUser.email ? "d-block" : "d-none"
+        }" method="post">
             <table class="table table-sm">
             <tr>
                 <td width="15%">Credit Card#:</td>
@@ -120,7 +151,7 @@ export async function profile_page() {
                     }" placeholder="16 digit card #" disabled required pattern="[0-9]+" minlength="16" maxlength="16">
                 </td>
                 <td>
-                    ${actionButtons()}
+                   ${actionButtons()}
                 </td>
             </tr>
             </table>
@@ -128,7 +159,11 @@ export async function profile_page() {
         <table>
             <tr>
                 <td>
+                <div class="${
+                  email == Auth.currentUser.email ? "d-block" : "d-none"
+                }">
                     <input type="file" id="profile-photo-button" value="upload">
+                    </div>
                 </td>
                 <td>
                     <img id="profile-photo-tag" class="rounded-circle" width="250px" src="${
@@ -136,16 +171,20 @@ export async function profile_page() {
                     }">
                 </td>
                 <td>
+                    <div class="${
+                      email == Auth.currentUser.email ? "d-block" : "d-none"
+                    }">
                     <button id="profile-photo-update-button" class="btn btn-outline-danger">Update Photo</button>
+                    </div>
                 </td>
             </tr>
         </table>
     `;
 
-    html += "<br><br><h1>Reviews</h1>"
+  html += "<br><br><h1>Reviews</h1>";
   let comments = [];
   try {
-    comments = await FirebaseController.getUserComments(Auth.currentUser.email);
+    comments = await FirebaseController.getUserComments(email);
   } catch (e) {
     if (Constant.DEV) console.log(e);
     Util.popupInfo("Cannot retrieve user comments", JSON.stringify(e));
@@ -156,21 +195,25 @@ export async function profile_page() {
      <form class="review-item" method="post">
             <table class="table table-sm">
             <tr>
-                <td width="15%">Posted on: <br>${new Date(comment.timestamp).toString()}</td>
+                <td width="15%">Posted on: <br>${new Date(
+                  comment.timestamp
+                ).toString()}</td>
                 <td width="5%">Product: ${comment.name}</td>
                 <td width="60%"> 
                 <span>Review:</span>
-                <input id="comment-content-${comment.docId}" type="text" name="Comment" disabled required minlength=5 value="${
-                       comment.content
-                    }">
+                <input id="comment-content-${
+                  comment.docId
+                }" type="text" name="Comment" disabled required minlength=5 value="${
+      comment.content
+    }">
                 <input type="hidden" name="docId" value="${comment.docId}">
                 </td>
             </tr>
             </table>
         
-    `
+    `;
     if (Auth.currentUser.email == comment.email) {
-        html += `
+      html += `
         <button onclick="this.form.submitter='Delete'" type="submit" class="btn btn-outline-primary">Delete</button>
         <button onclick="this.form.submitter='Edit'" type="submit" class="btn btn-outline-primary ">Edit</button>
         <button onclick="this.form.submitter='Update'" type="submit" class="btn btn-outline-danger " style="display:none;">Update</button>
@@ -270,55 +313,52 @@ export async function profile_page() {
   const reviews = document.getElementsByClassName("review-item");
   for (let i = 0; i < reviews.length; i++) {
     reviews[i].addEventListener("submit", async (e) => {
-      e.preventDefault()
+      e.preventDefault();
       const buttonLabel = e.target.submitter;
-      const buttons =  e.target.getElementsByTagName("button")
-      const input = e.target.getElementsByTagName("input")[0]
+      const buttons = e.target.getElementsByTagName("button");
+      const input = e.target.getElementsByTagName("input")[0];
       const value = input.value;
       //console.log(e.target.docId.value);
-      if(buttonLabel == "Delete"){
-      //const button = document.getElementById("button-delete-review");
-      //const label = Util.disableButton(button);
-      try {
+      if (buttonLabel == "Delete") {
+        //const button = document.getElementById("button-delete-review");
+        //const label = Util.disableButton(button);
+        try {
           await FirebaseController.deleteComment(e.target.docId.value);
-      } catch (e) {
-        if (Constant.DEV) console.log(e);
-        Util.popupInfo("deleteComment error", JSON.stringify(e));
-      }
-      //Util.enableButton(button, label);
-      profile_page();
-      }
-      else if(buttonLabel == "Edit"){
+        } catch (e) {
+          if (Constant.DEV) console.log(e);
+          Util.popupInfo("deleteComment error", JSON.stringify(e));
+        }
+        //Util.enableButton(button, label);
+        profile_page();
+      } else if (buttonLabel == "Edit") {
         //console.log("Edit")
         buttons[0].style.display = "none";
         buttons[1].style.display = "none";
         buttons[2].style.display = "inline-block";
         buttons[3].style.display = "inline-block";
-        input.disabled = false
-      }
-      else if(buttonLabel == "Update"){
+        input.disabled = false;
+      } else if (buttonLabel == "Update") {
         //console.log("Update")
-        const update = {}
-        try{
-          update["content"] = value
-          await FirebaseController.updateComment(e.target.docId.value, update)
-        }catch(e){
-          if(Util.DEV) console.log(e)
+        const update = {};
+        try {
+          update["content"] = value;
+          await FirebaseController.updateComment(e.target.docId.value, update);
+        } catch (e) {
+          if (Util.DEV) console.log(e);
         }
 
         buttons[3].style.display = "none";
         buttons[2].style.display = "none";
         buttons[1].style.display = "inline-block";
         buttons[0].style.display = "inline-block";
-        input.disabled = true
-      }
-      else{
+        input.disabled = true;
+      } else {
         //console.log("Cancel")
         buttons[3].style.display = "none";
         buttons[2].style.display = "none";
         buttons[1].style.display = "inline-block";
         buttons[0].style.display = "inline-block";
-        input.disabled = true
+        input.disabled = true;
       }
     });
   }

@@ -23,20 +23,6 @@ export let cart;
 let products;
 let page = 0;
 export async function home_page() {
-  //let html = `<h1>Enjoy shopping!</h1>`;
-
-  //if(Auth.currentUser){
-  // cart = new ShoppingCart(Auth.currentUser.uid)
-  //}
-
-  /*html += `
-    <div>
-    <button id="button-add-product" class="btn btn-outline-danger" style="display: ${
-      Auth.isAdmin ? "block" : "none"
-    }">+ Add Product</button>
-    </div>
-   `;*/
-
   try {
     products = await FirebaseController.getProductList();
     if (cart && cart.items) {
