@@ -4,6 +4,7 @@ import { ShoppingCart } from "../model/shoppingcart.js";
 import { AccountInfo } from "../model/account_info.js";
 import { Comment } from "../model/comment.js";
 import { Rules } from "../model/rules.js";
+import { FriendList } from "../model/friendlist.js";
 
 export async function signIn(email, password) {
   await firebase.auth().signInWithEmailAndPassword(email, password);
@@ -217,6 +218,29 @@ export async function searchProducts(keywords) {
     }
   });
   return productList;
+}
+
+export async function getFriendsList(email){
+   let friendList = [];
+   const snapShot = await firebase
+     .firestore()
+     .collection(Constant.collectionName.FRIENDS)
+     .where("owner", "==", email)
+     .get();
+   snapShot.forEach((doc) => {
+     const f = new FriendList(doc.data());
+     f.docId = doc.id;
+     friendList.push(f);
+   });
+   return friendList;
+}
+
+export async function addFriend(friend){
+    const ref = await firebase
+      .firestore()
+      .collection(Constant.collectionName.FRIENDS)
+      .add(friend.serialize());
+    return ref.id;
 }
 
 const cf_getProductById = firebase

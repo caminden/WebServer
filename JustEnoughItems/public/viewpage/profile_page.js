@@ -4,6 +4,7 @@ import * as Routes from "../controller/routes.js";
 import * as FirebaseController from "../controller/firebase_controller.js";
 import * as Util from "./util.js";
 import * as Constant from "../model/constant.js";
+import { FriendList } from "../model/friendlist.js";
 
 export function addEventListeners() {
   Element.menuButtonProfile.addEventListener("click", async (e) => {
@@ -33,7 +34,7 @@ export async function profile_page() {
 }
 
 export async function profilePage(uid, email) {
-  let accountInfo
+  let accountInfo;
 
   try {
     accountInfo = await FirebaseController.getAccountInfo(uid);
@@ -41,7 +42,7 @@ export async function profilePage(uid, email) {
     if (Constant.DEV) console.log(e);
     Util.popupInfo("Cannot retrieve account info", JSON.stringify(e));
   }
-    
+
   let html = `<h1>Profile Page</h1>`;
 
   html += `
@@ -49,6 +50,13 @@ export async function profilePage(uid, email) {
           email == Auth.currentUser.email ? "d-block" : "d-none"
         }">
             Email: ${Auth.currentUser.email} (cannot change email as login name)
+        </div>
+        <div class="${email != Auth.currentUser.email ? "d-block" : "d-none"}"> 
+          <form id="add-friend-button">
+            <input type="hidden" name="accountId" value="${uid}">
+            <input type="hidden" name="accountEmail" value="${email}">
+            <button type="submit" id="button-profile-view" class="btn btn-outline-primary"> Add Friend </button>
+          </form>
         </div>
         <form id="profile-name" class="form-profile-update" method="post">
             <table class="table table-sm">
@@ -218,14 +226,71 @@ export async function profilePage(uid, email) {
         <button onclick="this.form.submitter='Edit'" type="submit" class="btn btn-outline-primary ">Edit</button>
         <button onclick="this.form.submitter='Update'" type="submit" class="btn btn-outline-danger " style="display:none;">Update</button>
         <button onclick="this.form.submitter='Cancel'" type="submit" class="btn btn-outline-secondary " formnovalidate="true" style="display:none;">Cancel</button>
-        </form>`;
+        `;
     }
-    html += `<hr></div><br>`;
+    html += `</form></div><hr></br>`;
   });
+ 
+
+  html += `<br><br><div><h1>Friends</h1>`;
+  let friendList = [];
+  try {
+    friendList = await FirebaseController.getFriendsList(email);
+  } catch (e) {
+    if (Constant.DEV) console.log(e);
+    Util.popupInfo("Cannot retrieve friend list", JSON.stringify(e));
+  }
+
+  friendList.forEach((friend) => {
+    html += `
+            <table class="table table-sm">
+            <tr>
+                <td width="10%">
+                <form class="profile-button">
+                <input type="hidden" name="accountId" value="${friend.uid}">
+                <input type="hidden" name="accountEmail" value="${
+                  friend.email
+                }">
+                <button type="submit" id="button-profile-view" class="btn btn-outline-primary"> View Profile </button>
+                </form>
+                </td>
+                <td><h5>Name: ${friend.email}</h5></td>
+            </tr>
+            </table>
+    `;
+  });
+  html += `<hr></div><br>`;
 
   Element.mainContent.innerHTML = html;
 
   let photoProfile;
+
+  const addFriendButton = document.getElementById("add-friend-button");
+  addFriendButton.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    console.log("Add Friend");
+    const uid = e.target.accountId.value;
+    const email = e.target.accountEmail.value;
+    const owner = Auth.currentUser.email;
+    const f = new FriendList({
+      email,
+      uid,
+      owner,
+    });
+
+    try {
+      await FirebaseController.addFriend(f);
+      Util.popupInfo("Success", "Friend added", Constant.IdModelCreateNewRule);
+    } catch (e) {
+      if (Constant.DEV) console.log(e);
+      Util.popupInfo(
+        "Failed to add",
+        JSON.stringify(e),
+        Constant.IdModelCreateNewRule
+      );
+      return;
+    }
+  });
 
   document
     .getElementById("profile-photo-button")
@@ -360,6 +425,20 @@ export async function profilePage(uid, email) {
         buttons[0].style.display = "inline-block";
         input.disabled = true;
       }
+    });
+  }
+
+  const profileButtons = document.getElementsByClassName("profile-button");
+  for (let i = 0; i < profileButtons.length; i++) {
+    profileButtons[i].addEventListener("submit", async (e) => {
+      e.preventDefault();
+      console.log(e.target.accountId.value);
+      let accountInfo;
+      const accountId = e.target.accountId.value;
+      const accountEmail = e.target.accountEmail.value;
+      const button = document.getElementById("button-profile-view");
+      const label = Util.disableButton(button);
+      profilePage(accountId, accountEmail);
     });
   }
 }
